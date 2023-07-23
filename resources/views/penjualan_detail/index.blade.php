@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Transaksi Penjualan
+Transaksi Penjualan Member
 @endsection
 
 @push('css')
@@ -33,7 +33,7 @@ Transaksi Penjualan
 
 @section('breadcrumb')
 @parent
-<li class="active">Transaksi Penjaualn</li>
+<li class="active">Transaksi Penjaualan</li>
 @endsection
 
 @section('content')
@@ -44,12 +44,17 @@ Transaksi Penjualan
 
                 <form class="form-produk">
                     @csrf
+                    <div class="alert alert-info alert-dismissible" style="display: none;">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <i class="icon fa fa-check"></i> Perubahan berhasil disimpan
+                    </div>
                     <div class="form-group row">
                         <label for="kode_produk" class="col-lg-2">Kode Produk</label>
                         <div class="col-lg-5">
                             <div class="input-group">
                                 <input type="hidden" name="id_penjualan" id="id_penjualan" value="{{ $id_penjualan }}">
                                 <input type="hidden" name="id_produk" id="id_produk">
+                                <input type="hidden" name="jenis" id="jenis">
                                 <input type="text" class="form-control" name="kode_produk" id="kode_produk">
                                 <span class="input-group-btn">
                                     <button onclick="tampilProduk()" class="btn btn-info btn-flat" type="button"><i class="fa fa-arrow-right"></i></button>
@@ -66,7 +71,6 @@ Transaksi Penjualan
                         <th>Nama</th>
                         <th>Harga</th>
                         <th width="15%">Jumlah</th>
-                        <th>Diskon</th>
                         <th>Subtotal</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
@@ -162,7 +166,8 @@ Transaksi Penjualan
                         sortable: false
                     },
                     {
-                        data: 'kode_produk'
+                        data: 'kode_produk',
+                        visible: false,
                     },
                     {
                         data: 'nama_produk'
@@ -172,9 +177,6 @@ Transaksi Penjualan
                     },
                     {
                         data: 'jumlah'
-                    },
-                    {
-                        data: 'diskon'
                     },
                     {
                         data: 'subtotal'
@@ -200,7 +202,6 @@ Transaksi Penjualan
         $(document).on('input', '.quantity', function() {
             let id = $(this).data('id');
             let jumlah = parseInt($(this).val());
-            // let harga_jual = parseInt($(this).val());
 
             if (jumlah < 1) {
                 $(this).val(1);
@@ -238,11 +239,6 @@ Transaksi Penjualan
                 alert('Jumlah tidak boleh kurang dari 1');
                 return;
             }
-            // if (jumlah > 10000) {
-            //     $(this).val(10000);
-            //     alert('Jumlah tidak boleh lebih dari 10000');
-            //     return;
-            // }
 
             $.post(`{{ url('/transaksi') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
@@ -294,6 +290,15 @@ Transaksi Penjualan
     function pilihProduk(id, kode) {
         $('#id_produk').val(id);
         $('#kode_produk').val(kode);
+        $('#jenis').val('grosir');
+        hideProduk();
+        tambahProduk();
+    }
+
+    function pilihProdukEcer(id, kode) {
+        $('#id_produk').val(id);
+        $('#kode_produk').val(kode);
+        $('#jenis').val('eceran');
         hideProduk();
         tambahProduk();
     }

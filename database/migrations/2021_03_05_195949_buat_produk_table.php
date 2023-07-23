@@ -18,10 +18,14 @@ class BuatProdukTable extends Migration
             $table->integer('id_kategori');
             $table->string('nama_produk')->unique();
             $table->string('merk')->nullable();
+            $table->string('batch')->nullable();
+            $table->integer('jml_kemasan');
             $table->integer('harga_beli');
             $table->tinyInteger('diskon')->default(0);
             $table->integer('harga_jual');
+            $table->integer('harga_ecer');
             $table->integer('stok');
+            $table->integer('stok_buffer');
             $table->timestamps();
         });
     }

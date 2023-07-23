@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Produk
+Daftar Produk
 @endsection
 
 @section('breadcrumb')
-    @parent
-    <li class="active">Daftar Produk</li>
+@parent
+<li class="active">Daftar Produk</li>
 @endsection
 
 @section('content')
@@ -30,12 +30,14 @@
                             </th>
                             <th width="5%">No</th>
                             <th>Kode</th>
+                            <th>Batch</th>
                             <th>Nama</th>
                             <th>Kategori</th>
                             <th>Merk</th>
+                            <th>Jumlah Kemasan</th>
                             <th>Harga Beli</th>
                             <th>Harga Jual</th>
-                            <th>Diskon</th>
+                            <th>Harga Ecer</th>
                             <th>Stok</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
@@ -53,30 +55,63 @@
 <script>
     let table;
 
-    $(function () {
+    $(function() {
         table = $('.table').DataTable({
             processing: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('produk.data') }}',
+                url: "{{ route('produk.data') }}",
             },
-            columns: [
-                {data: 'select_all', searchable: false, sortable: false},
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'kode_produk'},
-                {data: 'nama_produk'},
-                {data: 'nama_kategori'},
-                {data: 'merk'},
-                {data: 'harga_beli'},
-                {data: 'harga_jual'},
-                {data: 'diskon'},
-                {data: 'stok'},
-                {data: 'aksi', searchable: false, sortable: false},
+            columns: [{
+                    data: 'select_all',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    data: 'kode_produk'
+                },
+                {
+                    data: 'batch'
+                },
+                {
+                    data: 'nama_produk'
+                },
+                {
+                    data: 'nama_kategori'
+                },
+                {
+                    data: 'merk'
+                },
+                {
+                    data: 'jml_kemasan'
+                },
+                {
+                    data: 'harga_beli'
+                },
+                {
+                    data: 'harga_jual'
+                },
+                {
+                    data: 'harga_ecer'
+                },
+                {
+                    data: 'stok'
+                },
+                {
+                    data: 'aksi',
+                    searchable: false,
+                    sortable: false
+                },
             ]
         });
 
-        $('#modal-form').validator().on('submit', function (e) {
-            if (! e.preventDefault()) {
+        $('#modal-form').validator().on('submit', function(e) {
+            if (!e.preventDefault()) {
                 $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
                     .done((response) => {
                         $('#modal-form').modal('hide');
@@ -89,7 +124,7 @@
             }
         });
 
-        $('[name=select_all]').on('click', function () {
+        $('[name=select_all]').on('click', function() {
             $(':checkbox').prop('checked', this.checked);
         });
     });
@@ -118,10 +153,14 @@
                 $('#modal-form [name=nama_produk]').val(response.nama_produk);
                 $('#modal-form [name=id_kategori]').val(response.id_kategori);
                 $('#modal-form [name=merk]').val(response.merk);
+                $('#modal-form [name=batch]').val(response.batch);
+                $('#modal-form [name=jml_kemasan]').val(response.jml_kemasan);
                 $('#modal-form [name=harga_beli]').val(response.harga_beli);
                 $('#modal-form [name=harga_jual]').val(response.harga_jual);
+                $('#modal-form [name=harga_ecer]').val(response.harga_ecer);
                 $('#modal-form [name=diskon]').val(response.diskon);
                 $('#modal-form [name=stok]').val(response.stok);
+                $('#modal-form [name=stok_buffer]').val(response.stok_buffer);
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');

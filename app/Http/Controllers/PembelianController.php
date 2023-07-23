@@ -28,10 +28,10 @@ class PembelianController extends Controller
                 return format_uang($pembelian->total_item);
             })
             ->addColumn('total_harga', function ($pembelian) {
-                return 'Rp. '. format_uang($pembelian->total_harga);
+                return 'Rp. ' . format_uang($pembelian->total_harga);
             })
             ->addColumn('bayar', function ($pembelian) {
-                return 'Rp. '. format_uang($pembelian->bayar);
+                return 'Rp. ' . format_uang($pembelian->bayar);
             })
             ->addColumn('tanggal', function ($pembelian) {
                 return tanggal_indonesia($pembelian->created_at, false);
@@ -45,8 +45,8 @@ class PembelianController extends Controller
             ->addColumn('aksi', function ($pembelian) {
                 return '
                 <div class="btn-group">
-                    <button onclick="showDetail(`'. route('pembelian.show', $pembelian->id_pembelian) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
-                    <button onclick="deleteData(`'. route('pembelian.destroy', $pembelian->id_pembelian) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                    <button onclick="showDetail(`' . route('pembelian.show', $pembelian->id_pembelian) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
+                    <button onclick="deleteData(`' . route('pembelian.destroy', $pembelian->id_pembelian) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 ';
             })
@@ -97,19 +97,19 @@ class PembelianController extends Controller
             ->of($detail)
             ->addIndexColumn()
             ->addColumn('kode_produk', function ($detail) {
-                return '<span class="label label-success">'. $detail->produk->kode_produk .'</span>';
+                return '<span class="label label-success">' . $detail->produk->batch . '</span>';
             })
             ->addColumn('nama_produk', function ($detail) {
-                return $detail->produk->nama_produk;
+                return $detail->produk->nama_produk . ' (' . $detail->produk->jml_kemasan . ')';
             })
             ->addColumn('harga_beli', function ($detail) {
-                return 'Rp. '. format_uang($detail->harga_beli);
+                return 'Rp. ' . format_uang($detail->harga_beli);
             })
             ->addColumn('jumlah', function ($detail) {
-                return format_uang($detail->jumlah);
+                return format_uang($detail->jumlah / $detail->jml_kemasan);
             })
             ->addColumn('subtotal', function ($detail) {
-                return 'Rp. '. format_uang($detail->subtotal);
+                return 'Rp. ' . format_uang($detail->subtotal);
             })
             ->rawColumns(['kode_produk'])
             ->make(true);

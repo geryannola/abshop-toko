@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Pengaturan
+Pengaturan
 @endsection
 
 @section('breadcrumb')
-    @parent
-    <li class="active">Pengaturan</li>
+@parent
+<li class="active">Pengaturan</li>
 @endsection
 
 @section('content')
@@ -44,8 +44,7 @@
                     <div class="form-group row">
                         <label for="path_logo" class="col-lg-2 control-label">Logo Perusahaan</label>
                         <div class="col-lg-4">
-                            <input type="file" name="path_logo" class="form-control" id="path_logo"
-                                onchange="preview('.tampil-logo', this.files[0])">
+                            <input type="file" name="path_logo" class="form-control" id="path_logo" onchange="preview('.tampil-logo', this.files[0])">
                             <span class="help-block with-errors"></span>
                             <br>
                             <div class="tampil-logo"></div>
@@ -54,8 +53,7 @@
                     <div class="form-group row">
                         <label for="path_kartu_member" class="col-lg-2 control-label">Kartu Member</label>
                         <div class="col-lg-4">
-                            <input type="file" name="path_kartu_member" class="form-control" id="path_kartu_member"
-                                onchange="preview('.tampil-kartu-member', this.files[0], 300)">
+                            <input type="file" name="path_kartu_member" class="form-control" id="path_kartu_member" onchange="preview('.tampil-kartu-member', this.files[0], 300)">
                             <span class="help-block with-errors"></span>
                             <br>
                             <div class="tampil-kartu-member"></div>
@@ -90,37 +88,37 @@
 
 @push('scripts')
 <script>
-    $(function () {
+    $(function() {
         showData();
 
-        $('.form-setting').validator().on('submit', function (e) {
-            if (! e.preventDefault()) {
+        $('.form-setting').validator().on('submit', function(e) {
+            if (!e.preventDefault()) {
                 $.ajax({
-                    url: $('.form-setting').attr('action'),
-                    type: $('.form-setting').attr('method'),
-                    data: new FormData($('.form-setting')[0]),
-                    async: false,
-                    processData: false,
-                    contentType: false
-                })
-                .done(response => {
-                    showData();
-                    $('.alert').fadeIn();
+                        url: $('.form-setting').attr('action'),
+                        type: $('.form-setting').attr('method'),
+                        data: new FormData($('.form-setting')[0]),
+                        async: false,
+                        processData: false,
+                        contentType: false
+                    })
+                    .done(response => {
+                        showData();
+                        $('.alert').fadeIn();
 
-                    setTimeout(() => {
-                        $('.alert').fadeOut();
-                    }, 3000);
-                })
-                .fail(errors => {
-                    alert('Tidak dapat menyimpan data');
-                    return;
-                });
+                        setTimeout(() => {
+                            $('.alert').fadeOut();
+                        }, 3000);
+                    })
+                    .fail(errors => {
+                        alert('Tidak dapat menyimpan data');
+                        return;
+                    });
             }
         });
     });
 
     function showData() {
-        $.get('{{ route('setting.show') }}')
+        $.get("{{ route('setting.show') }}")
             .done(response => {
                 $('[name=nama_perusahaan]').val(response.nama_perusahaan);
                 $('[name=telepon]').val(response.telepon);
@@ -128,9 +126,9 @@
                 $('[name=diskon]').val(response.diskon);
                 $('[name=tipe_nota]').val(response.tipe_nota);
                 $('title').text(response.nama_perusahaan + ' | Pengaturan');
-                
+
                 let words = response.nama_perusahaan.split(' ');
-                let word  = '';
+                let word = '';
                 words.forEach(w => {
                     word += w.charAt(0);
                 });

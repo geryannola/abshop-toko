@@ -6,8 +6,7 @@
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
@@ -38,6 +37,20 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="batch" class="col-lg-2 col-lg-offset-1 control-label">Batch</label>
+                        <div class="col-lg-6">
+                            <input type="text" name="batch" id="batch" class="form-control">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="jml_kemasan" class="col-lg-2 col-lg-offset-1 control-label">Jumlah Kemasan</label>
+                        <div class="col-lg-6">
+                            <input type="number" name="jml_kemasan" id="jml_kemasan" class="form-control" required>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="harga_beli" class="col-lg-2 col-lg-offset-1 control-label">Harga Beli</label>
                         <div class="col-lg-6">
                             <input type="number" name="harga_beli" id="harga_beli" class="form-control" required>
@@ -52,6 +65,13 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="harga_ecer" class="col-lg-2 col-lg-offset-1 control-label">Harga Eceran</label>
+                        <div class="col-lg-6">
+                            <input type="number" name="harga_ecer" id="harga_ecer" class="form-control" required>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="diskon" class="col-lg-2 col-lg-offset-1 control-label">Diskon</label>
                         <div class="col-lg-6">
                             <input type="number" name="diskon" id="diskon" class="form-control" value="0">
@@ -62,6 +82,13 @@
                         <label for="stok" class="col-lg-2 col-lg-offset-1 control-label">Stok</label>
                         <div class="col-lg-6">
                             <input type="number" name="stok" id="stok" class="form-control" required value="0">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="stok_buffer" class="col-lg-2 col-lg-offset-1 control-label">Stok Minimal</label>
+                        <div class="col-lg-6">
+                            <input type="number" name="stok_buffer" id="stok_buffer" class="form-control" required value="0">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

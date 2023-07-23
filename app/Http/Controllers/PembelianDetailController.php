@@ -17,7 +17,7 @@ class PembelianDetailController extends Controller
         $supplier = Supplier::find(session('id_supplier'));
         $diskon = Pembelian::find($id_pembelian)->diskon ?? 0;
 
-        if (! $supplier) {
+        if (!$supplier) {
             abort(404);
         }
 
@@ -35,23 +35,26 @@ class PembelianDetailController extends Controller
 
         foreach ($detail as $item) {
             $row = array();
-            $row['kode_produk'] = '<span class="label label-success">'. $item->produk['kode_produk'] .'</span';
-            $row['nama_produk'] = $item->produk['nama_produk'];
-            $row['harga_beli']  = 'Rp. '. format_uang($item->harga_beli);
-            $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pembelian_detail .'" value="'. $item->jumlah .'">';
-            $row['subtotal']    = 'Rp. '. format_uang($item->subtotal);
+            $row['kode_produk'] = '<span class="label label-success">' . $item->produk['batch'] . '</span';
+            $row['nama_produk'] = $item->produk['nama_produk'] . ' (' . $item->produk['jml_kemasan'] . ')';
+            // $row['harga_beli']  = 'Rp. ' . format_uang($item->harga_beli);
+            $row['harga_beli']  =
+                'Rp. ' . format_uang($item->harga_beli) . ',- ' . '<input type="number" class="form-control input-sm harga_beli" data-id="' . $item->id_pembelian_detail . '" value="' . $item->harga_beli . '">';
+
+            $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_pembelian_detail . '" value="' . $item->jumlah / $item->jml_kemasan . '">';
+            $row['subtotal']    = 'Rp. ' . format_uang($item->subtotal);
             $row['aksi']        = '<div class="btn-group">
-                                    <button onclick="deleteData(`'. route('pembelian_detail.destroy', $item->id_pembelian_detail) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                                    <button onclick="deleteData(`' . route('pembelian_detail.destroy', $item->id_pembelian_detail) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                                 </div>';
             $data[] = $row;
 
-            $total += $item->harga_beli * $item->jumlah;
-            $total_item += $item->jumlah;
+            $total += $item->harga_beli * $item->jumlah / $item->jml_kemasan;
+            $total_item += $item->jumlah / $item->jml_kemasan;
         }
         $data[] = [
             'kode_produk' => '
-                <div class="total hide">'. $total .'</div>
-                <div class="total_item hide">'. $total_item .'</div>',
+                <div class="total hide">' . $total . '</div>
+                <div class="total_item hide">' . $total_item . '</div>',
             'nama_produk' => '',
             'harga_beli'  => '',
             'jumlah'      => '',
@@ -62,14 +65,14 @@ class PembelianDetailController extends Controller
         return datatables()
             ->of($data)
             ->addIndexColumn()
-            ->rawColumns(['aksi', 'kode_produk', 'jumlah'])
+            ->rawColumns(['aksi', 'kode_produk', 'jumlah', 'harga_beli'])
             ->make(true);
     }
 
     public function store(Request $request)
     {
         $produk = Produk::where('id_produk', $request->id_produk)->first();
-        if (! $produk) {
+        if (!$produk) {
             return response()->json('Data gagal disimpan', 400);
         }
 
@@ -77,7 +80,8 @@ class PembelianDetailController extends Controller
         $detail->id_pembelian = $request->id_pembelian;
         $detail->id_produk = $produk->id_produk;
         $detail->harga_beli = $produk->harga_beli;
-        $detail->jumlah = 1;
+        $detail->jml_kemasan = $produk->jml_kemasan;
+        $detail->jumlah = $produk->jml_kemasan;
         $detail->subtotal = $produk->harga_beli;
         $detail->save();
 
@@ -86,10 +90,18 @@ class PembelianDetailController extends Controller
 
     public function update(Request $request, $id)
     {
-        $detail = PembelianDetail::find($id);
-        $detail->jumlah = $request->jumlah;
-        $detail->subtotal = $detail->harga_beli * $request->jumlah;
-        $detail->update();
+        // dd($request);
+        if ($request->jumlah != null) {
+            $detail = PembelianDetail::find($id);
+            $detail->jumlah = $request->jumlah * $detail->jml_kemasan;
+            $detail->subtotal = $detail->harga_beli * $request->jumlah;
+            $detail->update();
+        } else {
+            $detail = PembelianDetail::find($id);
+            $detail->harga_beli = $request->harga_beli;
+            $detail->subtotal = $request->harga_beli * $detail->jumlah / $detail->jml_kemasan;
+            $detail->update();
+        }
     }
 
     public function destroy($id)
@@ -107,7 +119,7 @@ class PembelianDetailController extends Controller
             'totalrp' => format_uang($total),
             'bayar' => $bayar,
             'bayarrp' => format_uang($bayar),
-            'terbilang' => ucwords(terbilang($bayar). ' Rupiah')
+            'terbilang' => ucwords(terbilang($bayar) . ' Rupiah')
         ];
 
         return response()->json($data);

@@ -17,6 +17,8 @@ class BuatPenjualanDetailTable extends Migration
             $table->increments('id_penjualan_detail');
             $table->integer('id_penjualan');
             $table->integer('id_produk');
+            $table->integer('jml_kemasan');
+            $table->string('jenis')->default('grosir');;
             $table->integer('harga_jual');
             $table->integer('jumlah');
             $table->tinyInteger('diskon')->default(0);

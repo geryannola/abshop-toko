@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Transaksi Pembelian
+Transaksi Pembelian
 @endsection
 
 @push('css')
@@ -32,8 +32,8 @@
 @endpush
 
 @section('breadcrumb')
-    @parent
-    <li class="active">Transaksi Pembelian</li>
+@parent
+<li class="active">Transaksi Pembelian</li>
 @endsection
 
 @section('content')
@@ -57,7 +57,7 @@
                 </table>
             </div>
             <div class="box-body">
-                    
+
                 <form class="form-produk">
                     @csrf
                     <div class="form-group row">
@@ -137,36 +137,55 @@
 <script>
     let table, table2;
 
-    $(function () {
+    $(function() {
         $('body').addClass('sidebar-collapse');
 
         table = $('.table-pembelian').DataTable({
-            processing: true,
-            autoWidth: false,
-            ajax: {
-                url: '{{ route('pembelian_detail.data', $id_pembelian) }}',
-            },
-            columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'kode_produk'},
-                {data: 'nama_produk'},
-                {data: 'harga_beli'},
-                {data: 'jumlah'},
-                {data: 'subtotal'},
-                {data: 'aksi', searchable: false, sortable: false},
-            ],
-            dom: 'Brt',
-            bSort: false,
-            paginate: false
-        })
-        .on('draw.dt', function () {
-            loadForm($('#diskon').val());
-        });
+                processing: true,
+                autoWidth: false,
+                ajax: {
+                    url: "{{ route('pembelian_detail.data', $id_pembelian) }}",
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        searchable: false,
+                        sortable: false
+                    },
+                    {
+                        data: 'kode_produk'
+                    },
+                    {
+                        data: 'nama_produk'
+                    },
+                    {
+                        data: 'harga_beli'
+                    },
+                    {
+                        data: 'jumlah'
+                    },
+                    {
+                        data: 'subtotal'
+                    },
+                    {
+                        data: 'aksi',
+                        searchable: false,
+                        sortable: false
+                    },
+                ],
+                dom: 'Brt',
+                bSort: false,
+                paginate: false
+            })
+            .on('draw.dt', function() {
+                loadForm($('#diskon').val());
+            });
         table2 = $('.table-produk').DataTable();
 
-        $(document).on('input', '.quantity', function () {
+        $(document).on('input', '.quantity', function() {
             let id = $(this).data('id');
             let jumlah = parseInt($(this).val());
+            let harga_beli = parseInt($(this).val());
+
 
             if (jumlah < 1) {
                 $(this).val(1);
@@ -185,7 +204,7 @@
                     'jumlah': jumlah
                 })
                 .done(response => {
-                    $(this).on('mouseout', function () {
+                    $(this).on('mouseout', function() {
                         table.ajax.reload(() => loadForm($('#diskon').val()));
                     });
                 })
@@ -195,7 +214,41 @@
                 });
         });
 
-        $(document).on('input', '#diskon', function () {
+
+        $(document).on('input', '.harga_beli', function() {
+            let id = $(this).data('id');
+            // let jumlah = parseInt($(this).val());
+
+            let harga_beli = parseInt($(this).val());
+
+            if (harga_beli < 1) {
+                $(this).val(1);
+                alert('Jumlah tidak boleh kurang dari 1');
+                return;
+            }
+            if (harga_beli > 10000) {
+                $(this).val(10000);
+                alert('Jumlah tidak boleh lebih dari 10000');
+                return;
+            }
+
+            $.post(`{{ url('/pembelian_detail') }}/${id}`, {
+                    '_token': $('[name=csrf-token]').attr('content'),
+                    '_method': 'put',
+                    'harga_beli': harga_beli
+                })
+                .done(response => {
+                    $(this).on('mouseout', function() {
+                        table.ajax.reload(() => loadForm($('#diskon').val()));
+                    });
+                })
+                .fail(errors => {
+                    alert('Tidak dapat menyimpan data');
+                    return;
+                });
+        });
+
+        $(document).on('input', '#diskon', function() {
             if ($(this).val() == "") {
                 $(this).val(0).select();
             }
@@ -203,7 +256,7 @@
             loadForm($(this).val());
         });
 
-        $('.btn-simpan').on('click', function () {
+        $('.btn-simpan').on('click', function() {
             $('.form-pembelian').submit();
         });
     });
@@ -224,7 +277,7 @@
     }
 
     function tambahProduk() {
-        $.post('{{ route('pembelian_detail.store') }}', $('.form-produk').serialize())
+        $.post('{{ route("pembelian_detail.store") }}', $('.form-produk').serialize())
             .done(response => {
                 $('#kode_produk').focus();
                 table.ajax.reload(() => loadForm($('#diskon').val()));
@@ -257,10 +310,10 @@
 
         $.get(`{{ url('/pembelian_detail/loadform') }}/${diskon}/${$('.total').text()}`)
             .done(response => {
-                $('#totalrp').val('Rp. '+ response.totalrp);
-                $('#bayarrp').val('Rp. '+ response.bayarrp);
+                $('#totalrp').val('Rp. ' + response.totalrp);
+                $('#bayarrp').val('Rp. ' + response.bayarrp);
                 $('#bayar').val(response.bayar);
-                $('.tampil-bayar').text('Rp. '+ response.bayarrp);
+                $('.tampil-bayar').text('Rp. ' + response.bayarrp);
                 $('.tampil-terbilang').text(response.terbilang);
             })
             .fail(errors => {

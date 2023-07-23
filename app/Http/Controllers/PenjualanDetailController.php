@@ -43,32 +43,35 @@ class PenjualanDetailController extends Controller
         $total_item = 0;
 
         foreach ($detail as $item) {
+            $jenis = $item->jenis;
+            if ($jenis == "grosir") {
+                $label = "label label-primary";
+            } else {
+                $label = "label label-danger";
+            }
             $row = array();
-            $row['kode_produk'] = '<span class="label label-success">' . $item->produk['kode_produk'] . '</span';
-            $row['nama_produk'] = $item->produk['nama_produk'];
-            // $row['harga_jual']  = 'Rp. ' . format_uang($item->harga_jual);
-
-            $row['harga_jual']      = '<input type="number" class="form-control input-sm harga_jual" data-id="' . $item->id_penjualan_detail . '" value="' . $item->harga_jual . '">';
-
-            $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_penjualan_detail . '" value="' . $item->jumlah . '">';
-            $row['diskon']      = $item->diskon . '%';
+            $row['kode_produk'] = '<span class="' . $label . '">' . $item->produk['kode_produk'] . '</span';
+            $row['nama_produk'] = $item->produk['nama_produk']  . ' (' . $item->produk['jml_kemasan'] . ') Rp.' . format_uang($item->produk['harga_beli']) . ' Stok=' . format_uang($item->produk['stok'] / $item->produk['jml_kemasan']) . '/' . format_uang($item->produk['stok']);
+            // $row['nama_produk'] = "<a>okokoko</a>";
+            $row['harga_jual']  = '<input type="number" class="form-control input-sm harga_jual" data-id="' . $item->id_penjualan_detail . '" value="' . $item->harga_jual . '">';
+            $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_penjualan_detail . '" value="' . $item->jumlah / $item->jml_kemasan . '">';
             $row['subtotal']    = 'Rp. ' . format_uang($item->subtotal);
             $row['aksi']        = '<div class="btn-group">
                                     <button onclick="deleteData(`' . route('transaksi.destroy', $item->id_penjualan_detail) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                                 </div>';
             $data[] = $row;
 
-            $total += $item->harga_jual * $item->jumlah;
-            $total_item += $item->jumlah;
+            $total += $item->harga_jual * $item->jumlah / $item->jml_kemasan;
+            $total_item += $item->jumlah / $item->jml_kemasan;
         }
         $data[] = [
-            'kode_produk' => '
+            'jumlah' => '
                 <div class="total hide">' . $total . '</div>
                 <div class="total_item hide">' . $total_item . '</div>',
             'nama_produk' => '',
             'harga_jual'  => '',
-            'jumlah'      => '',
-            'diskon'      => '',
+            // 'jumlah'      => '',
+            'kode_produk'      => '',
             'subtotal'    => '',
             'aksi'        => '',
         ];
@@ -87,26 +90,49 @@ class PenjualanDetailController extends Controller
             return response()->json('Data gagal disimpan', 400);
         }
 
-        $detail = new PenjualanDetail();
-        $detail->id_penjualan = $request->id_penjualan;
-        $detail->id_produk = $produk->id_produk;
-        $detail->harga_jual = $produk->harga_jual;
-        $detail->jumlah = 1;
-        $detail->diskon = 0;
-        $detail->subtotal = $produk->harga_jual;
-        $detail->save();
-
+        $penjualan = PenjualanDetail::where('id_penjualan', $request->id_penjualan)->where('id_produk', $request->id_produk)->first();
+        if (!$penjualan) {
+            if ($request->jenis == 'grosir') {
+                $jml_kemasan = $produk->jml_kemasan;
+                $jumlah = $produk->jml_kemasan;
+                $harga_jual = $produk->harga_jual;
+            } else {
+                $jml_kemasan = 1;
+                $jumlah = 1;
+                $harga_jual = $produk->harga_ecer;
+            }
+            $detail = new PenjualanDetail();
+            $detail->id_penjualan = $request->id_penjualan;
+            $detail->id_produk = $produk->id_produk;
+            $detail->harga_jual = $harga_jual;
+            $detail->jml_kemasan = $jml_kemasan;
+            $detail->jenis = $request->jenis;
+            $detail->jumlah = $jumlah;
+            $detail->diskon = 0;
+            $detail->subtotal = $harga_jual;
+            $detail->save();
+        } else {
+            $detail = PenjualanDetail::find($penjualan->id_penjualan_detail);
+            $detail->jumlah = $detail->jml_kemasan + $detail->jumlah;
+            $detail->subtotal = $detail->harga_jual * $detail->jumlah / $detail->jml_kemasan;
+            $detail->update();
+        }
         return response()->json('Data berhasil disimpan', 200);
     }
 
     public function update(Request $request, $id)
     {
-        $detail = PenjualanDetail::find($id);
-        dd($request->harga_jual);
-        // $detail->harga_jual = $request->harga_jual;
-        $detail->jumlah = $request->jumlah;
-        $detail->subtotal = $detail->harga_jual * $detail->jumlah;
-        $detail->update();
+        if ($request->jumlah != NULL) {
+            $detail = PenjualanDetail::find($id);
+            $detail->jumlah = $request->jumlah * $detail->jml_kemasan;
+            $detail->subtotal = $detail->harga_jual * $detail->jumlah / $detail->jml_kemasan;
+            $detail->update();
+        } else {
+            $detail = PenjualanDetail::find($id);
+            $detail->harga_jual = $request->harga_jual;
+            $detail->subtotal = $request->harga_jual * $detail->jumlah / $detail->jml_kemasan;
+            $detail->update();
+        }
     }
 
     public function destroy($id)

@@ -17,6 +17,7 @@ class BuatPembelianDetailTable extends Migration
             $table->increments('id_pembelian_detail');
             $table->integer('id_pembelian');
             $table->integer('id_produk');
+            $table->integer('jml_kemasan');
             $table->integer('harga_beli');
             $table->integer('jumlah');
             $table->integer('subtotal');

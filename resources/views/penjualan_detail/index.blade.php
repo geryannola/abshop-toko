@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Transaksi Penjualan Member
+Transaksi Penjualan
 @endsection
 
 @push('css')
@@ -33,7 +33,7 @@ Transaksi Penjualan Member
 
 @section('breadcrumb')
 @parent
-<li class="active">Transaksi Penjaualan</li>
+<li class="active">Transaksi Penjualan</li>
 @endsection
 
 @section('content')
@@ -165,10 +165,7 @@ Transaksi Penjualan Member
                         searchable: false,
                         sortable: false
                     },
-                    {
-                        data: 'kode_produk',
-                        visible: false,
-                    },
+                    
                     {
                         data: 'nama_produk'
                     },

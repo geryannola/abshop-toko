@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Penjualan
+Daftar Penjualan
 @endsection
 
 @section('breadcrumb')
-    @parent
-    <li class="active">Daftar Penjualan</li>
+@parent
+<li class="active">Daftar Penjualan</li>
 @endsection
 
 @section('content')
@@ -39,23 +39,44 @@
 <script>
     let table, table1;
 
-    $(function () {
+    $(function() {
         table = $('.table-penjualan').DataTable({
             processing: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('penjualan.data') }}',
+                url: "{{ route('penjualan.data') }}",
             },
-            columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'tanggal'},
-                {data: 'kode_member'},
-                {data: 'total_item'},
-                {data: 'total_harga'},
-                {data: 'diskon'},
-                {data: 'bayar'},
-                {data: 'kasir'},
-                {data: 'aksi', searchable: false, sortable: false},
+            columns: [{
+                    data: 'DT_RowIndex',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    data: 'tanggal'
+                },
+                {
+                    data: 'kode_member'
+                },
+                {
+                    data: 'total_item'
+                },
+                {
+                    data: 'total_harga'
+                },
+                {
+                    data: 'diskon'
+                },
+                {
+                    data: 'bayar'
+                },
+                {
+                    data: 'kasir'
+                },
+                {
+                    data: 'aksi',
+                    searchable: false,
+                    sortable: false
+                },
             ]
         });
 
@@ -63,13 +84,23 @@
             processing: true,
             bSort: false,
             dom: 'Brt',
-            columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'kode_produk'},
-                {data: 'nama_produk'},
-                {data: 'harga_jual'},
-                {data: 'jumlah'},
-                {data: 'subtotal'},
+            columns: [{
+                    data: 'DT_RowIndex',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    data: 'nama_produk'
+                },
+                {
+                    data: 'harga_jual'
+                },
+                {
+                    data: 'jumlah'
+                },
+                {
+                    data: 'subtotal'
+                },
             ]
         })
     });

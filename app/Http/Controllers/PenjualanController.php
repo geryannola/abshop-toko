@@ -97,11 +97,11 @@ class PenjualanController extends Controller
                 }
                 return redirect()->route('transaksi.selesai');
             }
-            // return redirect()->route('transaksi.index');
-            return response()->json('Data berhasil disimpan', 200);
+            return redirect()->route('transaksi.index');
+            // return response()->json('Data berhasil disimpan', 200);
         } else {
-            // return redirect()->route('transaksi.index');
-            return response()->json('Data berhasil disimpan', 200);
+            return redirect()->route('transaksi.index');
+            // return response()->json('Data berhasil disimpan', 200);
         }
     }
 
@@ -112,9 +112,9 @@ class PenjualanController extends Controller
         return datatables()
             ->of($detail)
             ->addIndexColumn()
-            ->addColumn('kode_produk', function ($detail) {
-                return '<span class="label label-success">' . $detail->produk->kode_produk . '</span>';
-            })
+            // ->addColumn('kode_produk', function ($detail) {
+            //     return '<span class="label label-success">' . $detail->produk->kode_produk . '</span>';
+            // })
             ->addColumn('nama_produk', function ($detail) {
                 return $detail->produk->nama_produk;
             })
@@ -127,7 +127,7 @@ class PenjualanController extends Controller
             ->addColumn('subtotal', function ($detail) {
                 return 'Rp. ' . format_uang($detail->subtotal);
             })
-            ->rawColumns(['kode_produk'])
+            ->rawColumns(['nama_produk'])
             ->make(true);
     }
 

@@ -29,7 +29,6 @@ Daftar Produk
                                 <input type="checkbox" name="select_all" id="select_all">
                             </th>
                             <th width="5%">No</th>
-                            <th>Kode</th>
                             <th>Batch</th>
                             <th>Nama</th>
                             <th>Kategori</th>
@@ -71,9 +70,6 @@ Daftar Produk
                     data: 'DT_RowIndex',
                     searchable: false,
                     sortable: false
-                },
-                {
-                    data: 'kode_produk'
                 },
                 {
                     data: 'batch'

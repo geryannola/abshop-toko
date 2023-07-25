@@ -15,17 +15,16 @@
                     <tbody>
                         @foreach ($produk as $key => $item)
                         <tr>
-                            <!-- <td width="5%">{{ $key+1 }}</td> -->
-                            <!-- <td><span class="label label-success">{{ $item->kode_produk }}</span></td> -->
-                            <td>{{ $item->nama_produk }}<br>{{ format_uang($item->harga_beli) }} </td>
-                            <td>{{ format_uang($item->harga_jual) }} / {{ format_uang($item->harga_ecer) }} <br> S : {{ format_uang($item->stok/$item->jml_kemasan) }} / {{ format_uang($item->stok) }}</td>
+
+                            <td> {{ $item->nama_produk }} ({{ $item->jml_kemasan }})<br>Rp. {{ format_uang($item->harga_beli) }} </td>
+                            <td><span class="label label-success">{{format_uang($item->harga_jual)}}</span> / <span class="label label-warning">{{format_uang($item->harga_ecer)}}</span><br> Stok : {{ format_uang($item->stok/$item->jml_kemasan) }} / {{ format_uang($item->stok) }}</td>
                             <td>
-                                <a href="#" class="btn btn-primary btn-xs btn-flat" onclick="pilihProduk('{{ $item->id_produk }}', '{{ $item->kode_produk }} - {{ $item->nama_produk }}')">
+                                <a href="#" class="btn btn-success btn-xs btn-flat" onclick="pilihProduk('{{ $item->id_produk }}', '{{ $item->kode_produk }} - {{ $item->nama_produk }}')">
                                     <i class="fa fa-check-circle"></i>
                                     Grosir
                                 </a>
-                                <a href="#" class="btn btn-danger btn-xs btn-flat" onclick="pilihProdukEcer('{{ $item->id_produk }}', '{{ $item->kode_produk }} - {{ $item->nama_produk }}')">
-                                    <i class="fa fa-check-circle"></i>
+                                <a href="#" class="btn btn-warning btn-xs btn-flat" onclick="pilihProdukEcer('{{ $item->id_produk }}', '{{ $item->kode_produk }} - {{ $item->nama_produk }}')">
+
                                     Eceran
                                 </a>
 

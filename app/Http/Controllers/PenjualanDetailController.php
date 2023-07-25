@@ -45,17 +45,19 @@ class PenjualanDetailController extends Controller
         foreach ($detail as $item) {
             $jenis = $item->jenis;
             if ($jenis == "grosir") {
-                $label = "label label-primary";
+                $label = "label label-success";
+                $harga = $item->harga_jual;
             } else {
-                $label = "label label-danger";
+                $label = "label label-warning";
+                $harga = $item->harga_jual;
             }
             $row = array();
-            $row['kode_produk'] = '<span class="' . $label . '">' . $item->produk['kode_produk'] . '</span';
-            $row['nama_produk'] = $item->produk['nama_produk']  . ' (' . $item->produk['jml_kemasan'] . ') Rp.' . format_uang($item->produk['harga_beli']) . ' Stok=' . format_uang($item->produk['stok'] / $item->produk['jml_kemasan']) . '/' . format_uang($item->produk['stok']);
-            // $row['nama_produk'] = "<a>okokoko</a>";
+            // $row['kode_produk'] = '<span class="' . $label . '">' . $item->produk['kode_produk'] . '</span>';
+            $row['nama_produk'] = '<span class="' . $label . '">' . $item->produk['nama_produk'] . '</span>' . ' (' . $item->produk['jml_kemasan'] . ') Rp.' . format_uang($item->produk['harga_beli']) . ' Rp.' . format_uang($harga) . ' Stok=' . format_uang($item->produk['stok'] / $item->produk['jml_kemasan']) . '/' . format_uang($item->produk['stok']);
+
             $row['harga_jual']  = '<input type="number" class="form-control input-sm harga_jual" data-id="' . $item->id_penjualan_detail . '" value="' . $item->harga_jual . '">';
             $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_penjualan_detail . '" value="' . $item->jumlah / $item->jml_kemasan . '">';
-            $row['subtotal']    = 'Rp. ' . format_uang($item->subtotal);
+            $row['subtotal']    = format_uang($item->subtotal);
             $row['aksi']        = '<div class="btn-group">
                                     <button onclick="deleteData(`' . route('transaksi.destroy', $item->id_penjualan_detail) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                                 </div>';
@@ -79,7 +81,7 @@ class PenjualanDetailController extends Controller
         return datatables()
             ->of($data)
             ->addIndexColumn()
-            ->rawColumns(['aksi', 'kode_produk', 'jumlah', 'harga_jual'])
+            ->rawColumns(['aksi', 'nama_produk', 'jumlah', 'harga_jual'])
             ->make(true);
     }
 

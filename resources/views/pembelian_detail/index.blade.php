@@ -78,12 +78,11 @@ Transaksi Pembelian
                 <table class="table table-stiped table-bordered table-pembelian">
                     <thead>
                         <th width="5%">No</th>
-                        <th>Kode</th>
                         <th>Nama</th>
-                        <th>Harga</th>
+                        <th width="15%">Harga</th>
                         <th width="15%">Jumlah</th>
                         <th>Subtotal</th>
-                        <th width="15%"><i class="fa fa-cog"></i></th>
+                        <th width="10%"><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
 
@@ -150,9 +149,6 @@ Transaksi Pembelian
                         data: 'DT_RowIndex',
                         searchable: false,
                         sortable: false
-                    },
-                    {
-                        data: 'kode_produk'
                     },
                     {
                         data: 'nama_produk'

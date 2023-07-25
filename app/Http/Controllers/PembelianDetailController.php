@@ -35,14 +35,12 @@ class PembelianDetailController extends Controller
 
         foreach ($detail as $item) {
             $row = array();
-            $row['kode_produk'] = '<span class="label label-success">' . $item->produk['batch'] . '</span';
-            $row['nama_produk'] = $item->produk['nama_produk'] . ' (' . $item->produk['jml_kemasan'] . ')';
-            // $row['harga_beli']  = 'Rp. ' . format_uang($item->harga_beli);
-            $row['harga_beli']  =
-                'Rp. ' . format_uang($item->harga_beli) . ',- ' . '<input type="number" class="form-control input-sm harga_beli" data-id="' . $item->id_pembelian_detail . '" value="' . $item->harga_beli . '">';
+            // $row['kode_produk'] = '<span class="label label-success">' . $item->produk['batch'] . '</span';
+            $row['nama_produk'] = '<span class="label label-success">' . format_uang($item->harga_beli) . '</span> ' . $item->produk['nama_produk'] . ' (' . $item->produk['jml_kemasan'] . ')';
+            $row['harga_beli']  = '<input type="number" class="form-control input-sm harga_beli" data-id="' . $item->id_pembelian_detail . '" value="' . $item->harga_beli . '">';
 
-            $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_pembelian_detail . '" value="' . $item->jumlah / $item->jml_kemasan . '">';
-            $row['subtotal']    = 'Rp. ' . format_uang($item->subtotal);
+            $row['jumlah']      = '<input type="number" siz class="form-control input-sm quantity" data-id="' . $item->id_pembelian_detail . '" value="' . $item->jumlah / $item->jml_kemasan . '">';
+            $row['subtotal']    = format_uang($item->subtotal);
             $row['aksi']        = '<div class="btn-group">
                                     <button onclick="deleteData(`' . route('pembelian_detail.destroy', $item->id_pembelian_detail) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                                 </div>';
@@ -52,10 +50,10 @@ class PembelianDetailController extends Controller
             $total_item += $item->jumlah / $item->jml_kemasan;
         }
         $data[] = [
-            'kode_produk' => '
+            'nama_produk' => '
                 <div class="total hide">' . $total . '</div>
                 <div class="total_item hide">' . $total_item . '</div>',
-            'nama_produk' => '',
+            // 'nama_produk' => '',
             'harga_beli'  => '',
             'jumlah'      => '',
             'subtotal'    => '',
@@ -65,7 +63,7 @@ class PembelianDetailController extends Controller
         return datatables()
             ->of($data)
             ->addIndexColumn()
-            ->rawColumns(['aksi', 'kode_produk', 'jumlah', 'harga_beli'])
+            ->rawColumns(['aksi', 'nama_produk', 'jumlah', 'harga_beli'])
             ->make(true);
     }
 

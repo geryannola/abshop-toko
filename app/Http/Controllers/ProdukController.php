@@ -25,7 +25,7 @@ class ProdukController extends Controller
     {
         $produk = Produk::leftJoin('kategori', 'kategori.id_kategori', 'produk.id_kategori')
             ->select('produk.*', 'nama_kategori')
-            ->orderBy('kode_produk', 'asc')
+            ->orderBy('kode_produk', 'desc')
             ->get();
 
         return datatables()
@@ -36,9 +36,9 @@ class ProdukController extends Controller
                     <input type="checkbox" name="id_produk[]" value="' . $produk->id_produk . '">
                 ';
             })
-            ->addColumn('kode_produk', function ($produk) {
-                return '<span class="label label-success">' . $produk->kode_produk . '</span>';
-            })
+            // ->addColumn('kode_produk', function ($produk) {
+            //     return '<span class="label label-success">' . $produk->kode_produk . '</span>';
+            // })
             ->addColumn('harga_beli', function ($produk) {
                 return format_uang($produk->harga_beli);
             })
@@ -59,7 +59,7 @@ class ProdukController extends Controller
                 </div>
                 ';
             })
-            ->rawColumns(['aksi', 'kode_produk', 'select_all'])
+            ->rawColumns(['aksi', 'select_all'])
             ->make(true);
     }
 

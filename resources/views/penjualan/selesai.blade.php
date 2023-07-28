@@ -60,7 +60,7 @@ Transaksi Penjualan
                                 <td>{{$key+1}}</td>
                                 <td>{{$item->produk->nama_produk}}</td>
                                 <td>{{format_uang($item->harga_jual)}}</td>
-                                <td>{{format_uang($item->jumlah)}}</td>
+                                <td>{{format_uang($item->jumlah/$item->jml_kemasan)}}</td>
                                 <td>{{format_uang($item->subtotal)}}</td>
                             </tr>
                             @endforeach

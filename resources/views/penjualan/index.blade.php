@@ -13,6 +13,7 @@ Daftar Penjualan
 <div class="row">
     <div class="col-lg-12">
         <div class="box">
+            <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Ubah Periode</button>
             <div class="box-body table-responsive">
                 <table class="table table-stiped table-bordered table-penjualan">
                     <thead>
@@ -21,7 +22,6 @@ Daftar Penjualan
                         <th>Kode Member</th>
                         <th>Total Item</th>
                         <th>Total Harga</th>
-                        <th>Diskon</th>
                         <th>Total Bayar</th>
                         <th>Kasir</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
@@ -62,9 +62,6 @@ Daftar Penjualan
                 },
                 {
                     data: 'total_harga'
-                },
-                {
-                    data: 'diskon'
                 },
                 {
                     data: 'bayar'

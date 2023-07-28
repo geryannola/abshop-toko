@@ -67,7 +67,6 @@ Transaksi Penjualan
                 <table class="table table-stiped table-bordered table-penjualan">
                     <thead>
                         <th width="5%">No</th>
-                        <th>Kode</th>
                         <th>Nama</th>
                         <th>Harga</th>
                         <th width="15%">Jumlah</th>
@@ -123,9 +122,15 @@ Transaksi Penjualan
                                 <label for="diterima" class="col-lg-2 control-label">Diterima</label>
                                 <div class="col-lg-8">
                                     <input type="number" id="diterima" class="form-control" name="diterima" value="{{ $penjualan->diterima ?? 0 }}">
+                                    <div class="d-flex justify-content-between">
+                                        <button class=" btn btn-primary mx-10 btn-sm btn-flat btn-sepuluh fixed-top">10.000</button>
+                                        <button class="btn btn-primary btn-sm btn-duapuluh">20.000</button>
+                                        <button class="btn btn-primary btn-sm   btn-limapuluh">50.000</button>
+                                        <button class="btn btn-primary btn-sm   btn-seratus">100.000</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class=" form-group row">
                                 <label for="kembali" class="col-lg-2 control-label">Kembali</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="kembali" name="kembali" class="form-control" value="0" readonly>
@@ -165,7 +170,7 @@ Transaksi Penjualan
                         searchable: false,
                         sortable: false
                     },
-                    
+
                     {
                         data: 'nama_produk'
                     },
@@ -198,6 +203,7 @@ Transaksi Penjualan
 
         $(document).on('input', '.quantity', function() {
             let id = $(this).data('id');
+
             let jumlah = parseInt($(this).val());
 
             if (jumlah < 1) {
@@ -210,6 +216,11 @@ Transaksi Penjualan
                 alert('Jumlah tidak boleh lebih dari 10000');
                 return;
             }
+            // if (jumlah >= stok) {
+            //     $(this).val(stok);
+            //     alert('Jumlah stok tidak cukup');
+            //     return;
+            // }
 
             $.post(`{{ url('/transaksi') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
@@ -274,7 +285,33 @@ Transaksi Penjualan
         $('.btn-simpan').on('click', function() {
             $('.form-penjualan').submit();
         });
+
+        $(".btn-sepuluh").click(function() {
+            $("#diterima").val("10000");
+            return;
+        });
+
+        $(".btn-duapuluh").click(function() {
+            $("#diterima").val("20000");
+            return;
+        });
+
+        $(".btn-limapuluh").click(function() {
+            $("#diterima").val("50000");
+            return;
+        });
+
+        $(".btn-seratus").click(function() {
+            $("#diterima").val("100000");
+            return;
+        });
     });
+    // $(document).ready(function() {
+
+    //     $("#sepuluh").click(function() {
+    //         $("#diterima").val("10000");
+    //     });
+    // });
 
     function tampilProduk() {
         $('#modal-produk').modal('show');

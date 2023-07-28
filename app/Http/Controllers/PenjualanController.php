@@ -153,8 +153,12 @@ class PenjualanController extends Controller
     public function selesai()
     {
         $setting = Setting::first();
+        $penjualan = Penjualan::latest('id_penjualan')->first();
+        $detail = PenjualanDetail::with('produk')->where('id_penjualan', $penjualan->id_penjualan)->get();
+        // $detail    = PenjualanDetail::with('produk')->where('id_penjualan', $penjualan->id_penjualan)->get();
+        // dd($detail);
 
-        return view('penjualan.selesai', compact('setting'));
+        return view('penjualan.selesai', compact('setting', 'penjualan', 'detail'));
     }
 
     public function notaKecil()

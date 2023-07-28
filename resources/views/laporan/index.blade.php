@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Laporan Pendapatan {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
+Laporan Pendapatan {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
 @endsection
 
 @push('css')
@@ -9,8 +9,8 @@
 @endpush
 
 @section('breadcrumb')
-    @parent
-    <li class="active">Laporan</li>
+@parent
+<li class="active">Laporan</li>
 @endsection
 
 @section('content')
@@ -45,20 +45,33 @@
 <script>
     let table;
 
-    $(function () {
+    $(function() {
         table = $('.table').DataTable({
             processing: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('laporan.data', [$tanggalAwal, $tanggalAkhir]) }}',
+                url: "{{ route('laporan.data', [$tanggalAwal, $tanggalAkhir]) }}",
             },
-            columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'tanggal'},
-                {data: 'penjualan'},
-                {data: 'pembelian'},
-                {data: 'pengeluaran'},
-                {data: 'pendapatan'}
+            columns: [{
+                    data: 'DT_RowIndex',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    data: 'tanggal'
+                },
+                {
+                    data: 'penjualan'
+                },
+                {
+                    data: 'pembelian'
+                },
+                {
+                    data: 'pengeluaran'
+                },
+                {
+                    data: 'pendapatan'
+                }
             ],
             dom: 'Brt',
             bSort: false,

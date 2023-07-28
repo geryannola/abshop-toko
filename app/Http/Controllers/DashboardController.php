@@ -11,17 +11,28 @@ use App\Models\Produk;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 class DashboardController extends Controller
 {
     public function index()
     {
         $kategori = Kategori::count();
         $produk = Produk::count();
+        $produkStok = Produk::get();
+        // $produkStok = Produk::select(DB::raw('sum(stok - stok_buffer) as sisa'))->get();
+        // dd($produkStok);
         $supplier = Supplier::count();
         $member = Member::count();
 
         $tanggal_awal = date('Y-m-01');
         $tanggal_akhir = date('Y-m-d');
+        $tanggal_bulan = date('Y-m');
+
+        $penjualanHari = Penjualan::where('created_at', 'LIKE', "%$tanggal_akhir%")->sum('bayar');
+        $penjualanBulan = Penjualan::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
+        $pembelianBulan = Pembelian::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
+        $pengunjung = Penjualan::where('created_at', 'LIKE', "%$tanggal_akhir%")->where('bayar', '>', "0")->count();
 
         $data_tanggal = array();
         $data_pendapatan = array();
@@ -40,7 +51,7 @@ class DashboardController extends Controller
         }
 
         if (auth()->user()->level == 1) {
-            return view('admin.dashboard', compact('kategori', 'produk', 'supplier', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_pendapatan'));
+            return view('admin.dashboard', compact('kategori', 'produk', 'supplier', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_pendapatan', 'produkStok', 'penjualanHari', 'penjualanBulan', 'pembelianBulan', 'pengunjung'));
         } else {
             return view('kasir.dashboard');
         }

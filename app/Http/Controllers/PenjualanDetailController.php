@@ -56,7 +56,7 @@ class PenjualanDetailController extends Controller
             $row['nama_produk'] = '<span class="' . $label . '">' . $item->produk['nama_produk'] . '</span>' . ' (' . $item->produk['jml_kemasan'] . ') Rp.' . format_uang($item->produk['harga_beli']) . ' Rp.' . format_uang($harga) . ' Stok=' . format_uang($item->produk['stok'] / $item->produk['jml_kemasan']) . '/' . format_uang($item->produk['stok']);
 
             $row['harga_jual']  = '<input type="number" class="form-control input-sm harga_jual" data-id="' . $item->id_penjualan_detail . '" value="' . $item->harga_jual . '">';
-            $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_penjualan_detail . '" value="' . $item->jumlah / $item->jml_kemasan . '">';
+            $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_penjualan_detail . '" data-stok="' . $item->stok / $item->jml_kemasan . '" value="' . $item->jumlah / $item->jml_kemasan . '">';
             $row['subtotal']    = format_uang($item->subtotal);
             $row['aksi']        = '<div class="btn-group">
                                     <button onclick="deleteData(`' . route('transaksi.destroy', $item->id_penjualan_detail) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
@@ -124,17 +124,18 @@ class PenjualanDetailController extends Controller
 
     public function update(Request $request, $id)
     {
+        $detail = PenjualanDetail::find($id);
+        // if ($request->jumlah * $detail->jml_kemasan <= 500) {
         if ($request->jumlah != NULL) {
-            $detail = PenjualanDetail::find($id);
             $detail->jumlah = $request->jumlah * $detail->jml_kemasan;
             $detail->subtotal = $detail->harga_jual * $detail->jumlah / $detail->jml_kemasan;
             $detail->update();
         } else {
-            $detail = PenjualanDetail::find($id);
             $detail->harga_jual = $request->harga_jual;
             $detail->subtotal = $request->harga_jual * $detail->jumlah / $detail->jml_kemasan;
             $detail->update();
         }
+        // }
     }
 
     public function destroy($id)

@@ -224,11 +224,7 @@ Dashboard
             var salesChart = new Chart(salesChartCanvas);
 
             var salesChartData = {
-                labels: {
-                    {
-                        json_encode($data_tanggal)
-                    }
-                },
+                labels: <?= json_encode($data_tanggal); ?>,
                 datasets: [{
                     label: 'Pendapatan',
                     fillColor: 'rgba(60,141,188,0.9)',
@@ -237,11 +233,7 @@ Dashboard
                     pointStrokeColor: 'rgba(60,141,188,1)',
                     pointHighlightFill: '#fff',
                     pointHighlightStroke: 'rgba(60,141,188,1)',
-                    data: {
-                        {
-                            json_encode($data_pendapatan)
-                        }
-                    }
+                    data: <?= json_encode($data_pendapatan) ?>
                 }]
             };
 

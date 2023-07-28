@@ -81,7 +81,8 @@ Dashboard
             <span class="info-box-icon bg-aqua"><i class="fa fa-money" aria-hidden="true"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">Penjualan Hari Ini</span>
+                <!-- <span class="info-box-text">Penjualan Hari Ini</span> -->
+                <p>Penjualan Hari Ini</p>
                 <span class="info-box-number">{{format_uang($penjualanHari)}}</span>
                 <p>Rupiah</p>
             </div>
@@ -97,7 +98,8 @@ Dashboard
             </span>
 
             <div class="info-box-content">
-                <span class="info-box-text">Penjualan Bulan Ini</span>
+                <!-- <span class="info-box-text">Penjualan Bulan Ini</span> -->
+                <p>Penjualan Bulan Ini</p>
                 <span class="info-box-number">{{format_uang($penjualanBulan)}}</span>
                 <p>Rupiah</p>
             </div>
@@ -115,7 +117,8 @@ Dashboard
             <span class="info-box-icon bg-green"><i class="fa fa-shopping-basket" aria-hidden="true"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">Pengunjung Hari ini</span>
+                <!-- <span class="info-box-text">Pengunjung Hari ini</span> -->
+                <p>Pengunjung Hari ini</p>
                 <span class="info-box-number">{{format_uang($pengunjung)}}</span>
             </div>
             <!-- /.info-box-content -->
@@ -128,7 +131,8 @@ Dashboard
             <span class="info-box-icon bg-yellow"><i class="fa fa-balance-scale" aria-hidden="true"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">Pengeluaran Bulan ini</span>
+                <!-- <span class="info-box-text">Pengeluaran Bulan ini</span> -->
+                <p>Pengeluaran Bulan ini</p>
                 <span class="info-box-number">{{format_uang($pembelianBulan)}}</span>
                 <p>Rupiah</p>
             </div>
@@ -172,7 +176,7 @@ Dashboard
         <!-- PRODUCT LIST -->
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title"><b>Stok Barang Menipis</b></h3>
+                <h3 class="box-title"><b>Stok Barang</b></h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>

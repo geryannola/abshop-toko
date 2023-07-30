@@ -24,6 +24,7 @@ class DashboardController extends Controller
         // dd($produkStok);
         $supplier = Supplier::count();
         $member = Member::count();
+        $nilaiStok = array();
 
         $tanggal_awal = date('Y-m-01');
         $tanggal_akhir = date('Y-m-d');
@@ -32,6 +33,9 @@ class DashboardController extends Controller
         $penjualanHari = Penjualan::where('created_at', 'LIKE', "%$tanggal_akhir%")->sum('bayar');
         $penjualanBulan = Penjualan::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
         $pembelianBulan = Pembelian::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
+        $nilaiStok = Produk::select(DB::raw('sum(harga_beli*stok) as harga'))->first('harga');
+
+
         $pengunjung = Penjualan::where('created_at', 'LIKE', "%$tanggal_akhir%")->where('bayar', '>', "0")->count();
 
         $data_tanggal = array();
@@ -51,7 +55,7 @@ class DashboardController extends Controller
         }
 
         if (auth()->user()->level == 1) {
-            return view('admin.dashboard', compact('kategori', 'produk', 'supplier', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_pendapatan', 'produkStok', 'penjualanHari', 'penjualanBulan', 'pembelianBulan', 'pengunjung'));
+            return view('admin.dashboard', compact('kategori', 'produk', 'supplier', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_pendapatan', 'produkStok', 'penjualanHari', 'penjualanBulan', 'pembelianBulan', 'pengunjung', 'nilaiStok'));
         } else {
             return view('kasir.dashboard');
         }

@@ -76,7 +76,7 @@ Dashboard
 <!-- /.row -->
 <!-- Small boxes (Stat box) KEDUA -->
 <div class="row">
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-2 col-sm-6 col-xs-12">
         <div class="info-box">
             <span class="info-box-icon bg-aqua"><i class="fa fa-money" aria-hidden="true"></i></span>
 
@@ -91,7 +91,7 @@ Dashboard
         <!-- /.info-box -->
     </div>
     <!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-2 col-sm-6 col-xs-12">
         <div class="info-box">
             <span class="info-box-icon bg-red">
                 <i class="fa fa-balance-scale" aria-hidden="true"></i>
@@ -112,7 +112,7 @@ Dashboard
     <!-- fix for small devices only -->
     <div class="clearfix visible-sm-block"></div>
 
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-2 col-sm-6 col-xs-12">
         <div class="info-box">
             <span class="info-box-icon bg-green"><i class="fa fa-shopping-basket" aria-hidden="true"></i></span>
 
@@ -126,7 +126,7 @@ Dashboard
         <!-- /.info-box -->
     </div>
     <!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-2 col-sm-6 col-xs-12">
         <div class="info-box">
             <span class="info-box-icon bg-yellow"><i class="fa fa-balance-scale" aria-hidden="true"></i></span>
 
@@ -134,6 +134,35 @@ Dashboard
                 <!-- <span class="info-box-text">Pengeluaran Bulan ini</span> -->
                 <p>Pengeluaran Bulan ini</p>
                 <span class="info-box-number">{{format_uang($pembelianBulan)}}</span>
+                <p>Rupiah</p>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-2 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-money" aria-hidden="true"></i></span>
+            <div class="info-box-content">
+                <!-- <span class="info-box-text">Pengunjung Hari ini</span> -->
+                <p>Nilai Stok</p>
+                <span class="info-box-number">{{format_uang($nilaiStok->harga)}}</span>
+                <p>Rupiah</p>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-2 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="fa fa-balance-scale" aria-hidden="true"></i></span>
+
+            <div class="info-box-content">
+                <!-- <span class="info-box-text">Pengeluaran Bulan ini</span> -->
+                <p></p>
+                <span class="info-box-number"></span>
                 <p>Rupiah</p>
             </div>
             <!-- /.info-box-content -->
@@ -198,6 +227,9 @@ Dashboard
                         </a>
                         <span class="product-description">
                             {{$produk->merk}}, Harga {{format_uang($produk->harga_beli)}} dengan harga Jual {{format_uang($produk->harga_jual)}}.
+                        </span>
+                        <span class="product-description">
+                            {{format_uang($produk->harga_beli*$produk->stok)}}.
                         </span>
                         <!-- </div> -->
                     </li>

@@ -222,11 +222,11 @@ Transaksi Pembelian
                 alert('Jumlah tidak boleh kurang dari 1');
                 return;
             }
-            if (harga_beli > 10000) {
-                $(this).val(10000);
-                alert('Jumlah tidak boleh lebih dari 10000');
-                return;
-            }
+            // if (harga_beli > 10000) {
+            //     $(this).val(10000);
+            //     alert('Jumlah tidak boleh lebih dari 10000');
+            //     return;
+            // }
 
             $.post(`{{ url('/pembelian_detail') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),

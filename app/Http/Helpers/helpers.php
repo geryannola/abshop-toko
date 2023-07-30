@@ -58,7 +58,7 @@ function tanggal_indonesia($tgl, $tampil_hari = true)
 function jam_indonesia($waktu)
 {
     $jam   = substr($waktu, 11, 2);
-    $menit   = substr($waktu, 13, 2);
+    $menit   = substr($waktu, 14, 2);
     $text    = '';
     $text       .= "$jam:$menit";
 

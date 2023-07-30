@@ -161,7 +161,7 @@ Dashboard
 
             <div class="info-box-content">
                 <!-- <span class="info-box-text">Pengeluaran Bulan ini</span> -->
-                <p></p>
+                <p>Keuntungan</p>
                 <span class="info-box-number"></span>
                 <p>Rupiah</p>
             </div>

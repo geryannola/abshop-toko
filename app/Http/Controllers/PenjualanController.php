@@ -36,8 +36,7 @@ class PenjualanController extends Controller
                 return tanggal_indonesia($penjualan->created_at, false);
             })
             ->addColumn('kode_member', function ($penjualan) {
-                $member = $penjualan->member->kode_member ?? '';
-                return '<span class="label label-success">' . $member . '</spa>';
+            return jam_indonesia($penjualan->created_at);
             })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';

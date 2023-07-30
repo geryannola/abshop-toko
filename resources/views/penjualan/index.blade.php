@@ -19,7 +19,7 @@ Daftar Penjualan
                     <thead>
                         <th width="5%">No</th>
                         <th>Tanggal</th>
-                        <th>Kode Member</th>
+                        <th>Waktu</th>
                         <th>Total Item</th>
                         <th>Total Harga</th>
                         <th>Total Bayar</th>

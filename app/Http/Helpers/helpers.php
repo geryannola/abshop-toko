@@ -55,6 +55,25 @@ function tanggal_indonesia($tgl, $tampil_hari = true)
     return $text; 
 }
 
+function jam_indonesia($waktu)
+{
+    // $nama_hari  = array(
+    //     'Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu'
+    // );
+    // $nama_bulan = array(
+    //     1 =>
+    //     'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    // );
+
+    $jam   = substr($waktu, 9, 2);
+    $menit   = substr($waktu, 11, 2);
+    $text    = '';
+
+    $text       .= "$jam:$menit";
+
+    return $text;
+}
+
 function tambah_nol_didepan($value, $threshold = null)
 {
     return sprintf("%0". $threshold . "s", $value);

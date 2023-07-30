@@ -229,7 +229,7 @@ Dashboard
                             {{$produk->merk}}, Harga {{format_uang($produk->harga_beli)}} dengan harga Jual {{format_uang($produk->harga_jual)}}.
                         </span>
                         <span class="product-description">
-                            {{format_uang($produk->harga_beli*$produk->stok)}}.
+                            {{format_uang($produk->harga_beli*$produk->stok/$produk->jml_kemasan)}}.
                         </span>
                         <!-- </div> -->
                     </li>

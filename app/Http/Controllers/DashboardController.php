@@ -33,7 +33,7 @@ class DashboardController extends Controller
         $penjualanHari = Penjualan::where('created_at', 'LIKE', "%$tanggal_akhir%")->sum('bayar');
         $penjualanBulan = Penjualan::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
         $pembelianBulan = Pembelian::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
-        $nilaiStok = Produk::select(DB::raw('sum(harga_beli*stok) as harga'))->first('harga');
+        $nilaiStok = Produk::select(DB::raw('sum(harga_beli*stok/jml_kemasan) as harga'))->first('harga');
 
 
         $pengunjung = Penjualan::where('created_at', 'LIKE', "%$tanggal_akhir%")->where('bayar', '>', "0")->count();

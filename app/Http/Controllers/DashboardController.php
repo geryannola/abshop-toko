@@ -19,7 +19,7 @@ class DashboardController extends Controller
     {
         $kategori = Kategori::count();
         $produk = Produk::count();
-        $produkStok = Produk::get();
+        $produkStok = Produk::orderByRaw('harga_beli * stok / jml_kemasan DESC')->get();
         // $produkStok = Produk::select(DB::raw('sum(stok - stok_buffer) as sisa'))->get();
         // dd($produkStok);
         $supplier = Supplier::count();

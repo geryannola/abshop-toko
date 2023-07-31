@@ -222,7 +222,7 @@ Dashboard
                     ?>
                     <li class="item">
                         <!-- <div class="product-info"> -->
-                        <a href="" class="">{{ $produk->nama_produk }}
+                        <a href="" class="">{{ $produk->nama_produk }} ({{ $produk->jml_kemasan }})
                             <h3 class="pull-right">{{format_uang($dos)}} / {{format_uang($sisa)}}</h3>
                         </a>
                         <span class="product-description">

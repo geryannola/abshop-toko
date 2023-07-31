@@ -222,13 +222,13 @@ Dashboard
                     ?>
                     <li class="item">
                         <!-- <div class="product-info"> -->
-                        <a href="" class="">{{ $produk->nama_produk }} ({{ $produk->jml_kemasan }})
+                        <a href="" class="h3">{{ $produk->nama_produk }} ({{ $produk->jml_kemasan }})
                             <h3 class="pull-right">{{format_uang($dos)}} / {{format_uang($sisa)}}</h3>
                         </a>
                         <span class="product-description">
-                            {{$produk->merk}}, Harga {{format_uang($produk->harga_beli)}} dengan harga Jual {{format_uang($produk->harga_jual)}}.
+                            Harga <b>{{format_uang($produk->harga_beli)}}</b> dengan harga Jual <b>{{format_uang($produk->harga_jual)}} / {{format_uang($produk->harga_ecer)}} </b>.
                         </span>
-                        <span class="product-description">
+                        <span class="product-description h4">
                             {{format_uang($produk->harga_beli*$produk->stok/$produk->jml_kemasan)}}.
                         </span>
                         <!-- </div> -->

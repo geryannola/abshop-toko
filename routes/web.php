@@ -68,6 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
         Route::get('/penjualan/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
         Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
+       
+        Route::get('/transaksi/nota-kecil2', [PenjualanController::class, 'notaKecil2'])->name('transaksi.nota_kecil2');
     });
 
     Route::group(['middleware' => 'level:1,2'], function () {

@@ -162,7 +162,7 @@ Dashboard
             <div class="info-box-content">
                 <!-- <span class="info-box-text">Pengeluaran Bulan ini</span> -->
                 <p>Keuntungan</p>
-                <span class="info-box-number"></span>
+                <span class="info-box-number">{{format_uang($untung)}}</span>
                 <p>Rupiah</p>
             </div>
             <!-- /.info-box-content -->

@@ -27,6 +27,7 @@ class ProdukController extends Controller
             ->select('produk.*', 'nama_kategori')
             ->orderBy('kode_produk', 'desc')
             ->get();
+       
 
         return datatables()
             ->of($produk)
@@ -49,7 +50,9 @@ class ProdukController extends Controller
                 return format_uang($produk->harga_ecer);
             })
             ->addColumn('stok', function ($produk) {
-                return format_uang($produk->stok / $produk->jml_kemasan) . ' / ' . format_uang($produk->stok);
+            $dos = floor($produk->stok / $produk->jml_kemasan);
+            $sisa = ($produk->stok - ($dos * $produk->jml_kemasan));
+                return format_uang($dos) . ' / ' . format_uang($sisa);
             })
             ->addColumn('aksi', function ($produk) {
                 return '

@@ -35,10 +35,17 @@ class DashboardController extends Controller
         $penjualanBulan = Penjualan::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
         $pembelianBulan = Pembelian::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
         $nilaiStok = Produk::select(DB::raw('sum(harga_beli*stok/jml_kemasan) as harga'))->first('harga');
-        // $untung = PenjualanDetail::With('produk')->where('created_at', 'LIKE', "%$tanggal_akhir%")
-        // ->select(DB::raw('sum(subtotal-(jumlah/jml_kemasan*harga_beli)) as untung', 'created_at'))
-        // ->first('untung');
 
+        
+        $untung = PenjualanDetail::join('produk', 'produk.id_produk','=', 'penjualan_detail.id_produk')->where('penjualan_detail.created_at', 'LIKE', "%$tanggal_akhir%")
+        ->select(DB::raw('sum(penjualan_detail.subtotal-(penjualan_detail.jumlah/penjualan_detail.jml_kemasan*produk.harga_beli)) AS untung'))
+        ->first();
+        $untung = round($untung->untung, 0);
+        // return $untung;
+
+        // $untung = PenjualanDetail::With('produk')->where('created_at', 'LIKE', "%$tanggal_akhir%")
+        // ->select(DB::raw('sum(subtotal-(jumlah/jml_kemasan*harga_beli)) AS untung', 'harga_beli'))
+        // ->first('untung');
 
         $pengunjung = Penjualan::where('created_at', 'LIKE', "%$tanggal_akhir%")->where('bayar', '>', "0")->count();
 
@@ -59,7 +66,7 @@ class DashboardController extends Controller
         }
 
         if (auth()->user()->level == 1) {
-            return view('admin.dashboard', compact('kategori', 'produk', 'supplier', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_pendapatan', 'produkStok', 'penjualanHari', 'penjualanBulan', 'pembelianBulan', 'pengunjung', 'nilaiStok'));
+            return view('admin.dashboard', compact('kategori', 'produk', 'supplier', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_pendapatan', 'produkStok', 'penjualanHari', 'penjualanBulan', 'pembelianBulan', 'pengunjung', 'nilaiStok', 'untung'));
         } else {
             return view('kasir.dashboard');
         }

@@ -34,15 +34,12 @@ class DashboardController extends Controller
         $penjualanHari = Penjualan::where('created_at', 'LIKE', "%$tanggal_akhir%")->sum('bayar');
         $penjualanBulan = Penjualan::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
         $pembelianBulan = Pembelian::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
-        $nilaiStok = Produk::select(DB::raw('sum(harga_beli*stok/jml_kemasan) as harga'))->first('harga');
-
+        $nilaiStok = Produk::select(DB::raw('sum(harga_beli*stok/jml_kemasan) as harga'))->first('harga');        
+        $untung = PenjualanDetail::JOIN('produk', 'produk.id_produk','=', 'penjualan_detail.id_produk')->where('penjualan_detail.created_at', 'LIKE', "%$tanggal_akhir%")
+        ->sum(DB::raw('penjualan_detail.subtotal-(penjualan_detail.jumlah/penjualan_detail.jml_kemasan*penjualan_detail.harga_beli)'));
         
-        $untung = PenjualanDetail::join('produk', 'produk.id_produk','=', 'penjualan_detail.id_produk')->where('penjualan_detail.created_at', 'LIKE', "%$tanggal_akhir%")
-        ->select(DB::raw('sum(penjualan_detail.subtotal-(penjualan_detail.jumlah/penjualan_detail.jml_kemasan*produk.harga_beli)) AS untung'))
-        ->first();
-        $untung = round($untung->untung, 0);
-        // return $untung;
-
+        $untung = round($untung, 0);
+        
         // $untung = PenjualanDetail::With('produk')->where('created_at', 'LIKE', "%$tanggal_akhir%")
         // ->select(DB::raw('sum(subtotal-(jumlah/jml_kemasan*harga_beli)) AS untung', 'harga_beli'))
         // ->first('untung');

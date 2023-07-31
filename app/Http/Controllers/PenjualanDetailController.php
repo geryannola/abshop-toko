@@ -98,15 +98,18 @@ class PenjualanDetailController extends Controller
                 $jml_kemasan = $produk->jml_kemasan;
                 $jumlah = $produk->jml_kemasan;
                 $harga_jual = $produk->harga_jual;
+                $harga_beli = $produk->harga_beli;
             } else {
                 $jml_kemasan = 1;
                 $jumlah = 1;
                 $harga_jual = $produk->harga_ecer;
+                $harga_beli = round($produk->harga_beli/ $produk->jml_kemasan);
             }
             $detail = new PenjualanDetail();
             $detail->id_penjualan = $request->id_penjualan;
             $detail->id_produk = $produk->id_produk;
             $detail->harga_jual = $harga_jual;
+            $detail->harga_beli = $harga_beli;
             $detail->jml_kemasan = $jml_kemasan;
             $detail->jenis = $request->jenis;
             $detail->jumlah = $jumlah;

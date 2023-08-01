@@ -18,7 +18,7 @@ class PenjualanController extends Controller
 
     public function data()
     {
-        $penjualan = Penjualan::with('member')->orderBy('id_penjualan', 'desc')->get();
+        $penjualan = Penjualan::with('member')->where('diterima', '!=', 0)->orderBy('id_penjualan', 'desc')->get();
 
         return datatables()
             ->of($penjualan)
@@ -50,9 +50,10 @@ class PenjualanController extends Controller
             ->addColumn('aksi', function ($penjualan) {
                 return '
                 <div class="btn-group">
-                    
-                    <button onclick="showDetail(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-info btn-flat "><i class="fa fa-eye"></i></button>
-                    <button onclick="deleteData(`' . route('penjualan.destroy', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                    <button onclick="notaKecil2(`' . route('transaksi.nota_kecil2', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-secondary btn-flat"><i class="fa fa-print" aria-hidden="true"></i></button>  
+
+                   <button onclick="showDetail(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-info btn-flat"><i class="fa fa-eye"></i></button>  
+                    <button onclick="deleteData(`' . route('penjualan.destroy', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 ';
             })

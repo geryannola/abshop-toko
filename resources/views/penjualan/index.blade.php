@@ -119,7 +119,7 @@ Daftar Penjualan
         popupCenter(url, title, 625, 500);
     }
 
-    function notaKecil2(url, title) {
+    function notaKecil2(url, title,id) {
         popupCenter(url, title, 625, 500);
     }
 

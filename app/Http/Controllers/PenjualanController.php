@@ -169,7 +169,7 @@ class PenjualanController extends Controller
     public function notaKecil()
     {
         $setting = Setting::first();
-        dd($setting);
+        // dd($setting);
         $penjualan = Penjualan::find(session('id_penjualan'));
         if (!$penjualan) {
             abort(404);

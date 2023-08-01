@@ -14,7 +14,7 @@
                         <th>Harga</th>
                         <th>Jumlah</th>
                         <th>Subtotal</th>
-                        <th>Keuntungan</th>
+                        <th>Profit</th>
                     </thead>
                 </table>
             </div>

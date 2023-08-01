@@ -10,9 +10,11 @@
                     <thead>
                         <th width="5%">No</th>
                         <th>Nama</th>
+                        <th>Harga Beli</th>
                         <th>Harga</th>
                         <th>Jumlah</th>
                         <th>Subtotal</th>
+                        <th>Keuntungan</th>
                     </thead>
                 </table>
             </div>

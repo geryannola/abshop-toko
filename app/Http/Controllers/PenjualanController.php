@@ -38,6 +38,9 @@ class PenjualanController extends Controller
             ->addColumn('kode_member', function ($penjualan) {
             return jam_indonesia($penjualan->created_at);
             })
+            ->addColumn('kode_member', function ($penjualan) {
+                return jam_indonesia($penjualan->created_at);
+            })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';
             })
@@ -123,6 +126,9 @@ class PenjualanController extends Controller
             }
                 return '<span class="'. $label.'">' . strtoupper($detail->jenis) . '</span> ' . $detail->produk->nama_produk;
             })
+            ->addColumn('harga_beli', function ($detail) {
+                return 'Rp. ' . format_uang($detail->harga_beli);
+            })
             ->addColumn('harga_jual', function ($detail) {
                 return 'Rp. ' . format_uang($detail->harga_jual);
             })
@@ -131,6 +137,11 @@ class PenjualanController extends Controller
             })
             ->addColumn('subtotal', function ($detail) {
                 return 'Rp. ' . format_uang($detail->subtotal);
+            })
+            ->addColumn('profit', function ($detail) {
+               
+                $profit = ($detail->subtotal-($detail->jumlah/ $detail->jml_kemasan* $detail->harga_beli));
+                return 'Rp. ' . format_uang($profit);
             })
             ->rawColumns(['nama_produk'])
             ->make(true);

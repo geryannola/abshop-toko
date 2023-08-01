@@ -90,6 +90,9 @@ Daftar Penjualan
                     data: 'nama_produk'
                 },
                 {
+                    data: 'harga_beli'
+                },
+                {
                     data: 'harga_jual'
                 },
                 {
@@ -97,6 +100,9 @@ Daftar Penjualan
                 },
                 {
                     data: 'subtotal'
+                },
+                {
+                    data: 'profit'
                 },
             ]
         })

@@ -200,7 +200,9 @@ Dashboard
 </div>
 <!-- /.row (main row) -->
 
+
 <!-- Main row -->
+
 <div class="row">
     <div class="col-lg-12">
         <!-- PRODUCT LIST -->

@@ -99,6 +99,10 @@ class PembelianDetailController extends Controller
             $detail->harga_beli = $request->harga_beli;
             $detail->subtotal = $request->harga_beli * $detail->jumlah / $detail->jml_kemasan;
             $detail->update();
+
+            $detail = Produk::find($detail->id_produk);
+            $detail->harga_beli = $request->harga_beli;
+            $detail->update();
         }
     }
 

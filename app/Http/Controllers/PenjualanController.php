@@ -7,8 +7,6 @@ use App\Models\PenjualanDetail;
 use App\Models\Produk;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-// use DB;
 use PDF;
 
 class PenjualanController extends Controller
@@ -20,15 +18,10 @@ class PenjualanController extends Controller
 
     public function data()
     {
-        $tanggal = date('2023-08-01');
-        // $tanggal = date('Y-m-d');
-        $penjualan = Penjualan::join('penjualan_detail', 'penjualan_detail.id_penjualan','=','penjualan.id_penjualan')->join('users', 'users.id', '=', 'penjualan.id_user')
-        ->select('penjualan.created_at', 'penjualan.total_item', 'penjualan.bayar', 'penjualan.total_harga', 'penjualan.id_penjualan', 'users.name')
-        ->groupby('penjualan_detail.id_penjualan')
-        ->where('penjualan.diterima', '!=', 0)
-        ->where('penjualan.created_at', 'LIKE', "%$tanggal%")
-        ->orderBy('penjualan.id_penjualan', 'desc')
-        ->get();
+        $tanggal = date('Y-m-d');
+        $penjualan = Penjualan::with('member')->where('diterima', '!=', 0)
+        // ->where('created_at', 'LIKE', "%$tanggal%")
+        ->orderBy('id_penjualan', 'desc')->get();
         return datatables()
             ->of($penjualan)
             ->addIndexColumn()
@@ -44,14 +37,14 @@ class PenjualanController extends Controller
             ->addColumn('bayar', function ($penjualan) {
                 return 'Rp. ' . format_uang($penjualan->bayar);
             })
-            // ->addColumn('profit', function ($penjualan) {
-            //     return 'Rp. ' . format_uang($penjualan->profit);
-            // })
+            ->addColumn('profit', function ($penjualan) {
+                return 'Rp. ' . format_uang($penjualan->total_harga);
+            })
             // ->editColumn('diskon', function ($penjualan) {
             //     return $penjualan->diskon . '%';
             // })
             ->editColumn('kasir', function ($penjualan) {
-                return $penjualan->name ?? '';
+                return $penjualan->user->name ?? '';
             })
             ->addColumn('aksi', function ($penjualan) {
                 return '
@@ -62,7 +55,7 @@ class PenjualanController extends Controller
                 </div>
                 ';
             })
-            ->rawColumns(['aksi', 'kode_member','profit'])
+            ->rawColumns(['aksi', 'kode_member'])
             ->make(true);
     }
 

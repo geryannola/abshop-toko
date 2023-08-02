@@ -20,7 +20,8 @@ class PenjualanController extends Controller
 
     public function data()
     {
-        $tanggal = date('Y-m-d');
+        $tanggal = date('2023-08-01');
+        // $tanggal = date('Y-m-d');
         $penjualan = Penjualan::join('penjualan_detail', 'penjualan_detail.id_penjualan','=','penjualan.id_penjualan')->join('users', 'users.id', '=', 'penjualan.id_user')
         ->select('penjualan.created_at', 'penjualan.total_item', 'penjualan.bayar', 'penjualan.total_harga', 'penjualan.id_penjualan', 'users.name')
         ->groupby('penjualan_detail.id_penjualan')

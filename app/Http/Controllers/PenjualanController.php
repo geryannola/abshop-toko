@@ -25,7 +25,7 @@ class PenjualanController extends Controller
         ->select('penjualan.created_at', 'penjualan.total_item', 'penjualan.bayar', 'penjualan.total_harga', 'penjualan.id_penjualan', 'users.name')
         ->groupby('penjualan_detail.id_penjualan')
         ->where('penjualan.diterima', '!=', 0)
-        // ->where('penjualan.created_at', 'LIKE', "%$tanggal%")
+        ->where('penjualan.created_at', 'LIKE', "%$tanggal%")
         ->orderBy('penjualan.id_penjualan', 'desc')
         ->get();
         return datatables()

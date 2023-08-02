@@ -207,21 +207,11 @@ Transaksi Penjualan
 
                     let jumlah = parseInt($(this).val());
 
-                    // if (jumlah < 1) {
-                    //     $(this).val(1);
-                    //     alert('Jumlah tidak boleh kurang dari 1');
-                    //     return;
-                    // }
                     if (jumlah > 10000) {
                         $(this).val(10000);
                         alert('Jumlah tidak boleh lebih dari 10000');
                         return;
                     }
-                    // if (jumlah >= stok) {
-                    //     $(this).val(stok);
-                    //     alert('Jumlah stok tidak cukup');
-                    //     return;
-                    // }
 
                     $.post(`{{ url('/transaksi') }}/${id}`, {
                             '_token': $('[name=csrf-token]').attr('content'),

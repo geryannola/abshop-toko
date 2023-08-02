@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Pembelian;
 use App\Models\Pengeluaran;
 use App\Models\Penjualan;
+use App\Models\PenjualanDetail;
 use Illuminate\Http\Request;
 use PDF;
+
+use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {
@@ -29,6 +32,7 @@ class LaporanController extends Controller
         $data = array();
         $pendapatan = 0;
         $total_pendapatan = 0;
+        $total_profit = 0;
 
         while (strtotime($awal) <= strtotime($akhir)) {
             $tanggal = $awal;
@@ -37,9 +41,19 @@ class LaporanController extends Controller
             $total_penjualan = Penjualan::where('created_at', 'LIKE', "%$tanggal%")->sum('bayar');
             $total_pembelian = Pembelian::where('created_at', 'LIKE', "%$tanggal%")->sum('bayar');
             $total_pengeluaran = Pengeluaran::where('created_at', 'LIKE', "%$tanggal%")->sum('nominal');
+            // $total_profit = Pengeluaran::where('created_at', 'LIKE', "%$tanggal%")->sum('nominal');
+
+            $profit = PenjualanDetail::JOIN('penjualan', 'penjualan.id_penjualan', '=', 'penjualan_detail.id_penjualan')->where('penjualan_detail.created_at', 'LIKE', "%$tanggal%")->where('penjualan.diterima', '!=', 0)
+            ->sum(DB::raw('penjualan_detail.subtotal-(penjualan_detail.jumlah/penjualan_detail.jml_kemasan*penjualan_detail.harga_beli)'));
+            // $untung = PenjualanDetail::JOIN('penjualan', 'penjualan.id_penjualan', '=', 'penjualan_detail.id_penjualan')->where('penjualan_detail.created_at', 'LIKE', "%$tanggal_akhir%")->where('penjualan.diterima', '!=', 0)
+            // ->sum(DB::raw('penjualan_detail.subtotal-(penjualan_detail.jumlah/penjualan_detail.jml_kemasan*penjualan_detail.harga_beli)'));
+
+
 
             $pendapatan = $total_penjualan - $total_pembelian - $total_pengeluaran;
             $total_pendapatan += $pendapatan;
+            $total_profit += $profit;
+
 
             $row = array();
             $row['DT_RowIndex'] = $no++;
@@ -48,6 +62,7 @@ class LaporanController extends Controller
             $row['pembelian'] = format_uang($total_pembelian);
             $row['pengeluaran'] = format_uang($total_pengeluaran);
             $row['pendapatan'] = format_uang($pendapatan);
+            $row['profit'] = format_uang($profit);
 
             $data[] = $row;
         }
@@ -59,6 +74,8 @@ class LaporanController extends Controller
             'pembelian' => '',
             'pengeluaran' => 'Total Pendapatan',
             'pendapatan' => format_uang($total_pendapatan),
+            'profit' => format_uang($total_profit),
+
         ];
 
         return $data;

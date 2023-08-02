@@ -7,6 +7,8 @@ use App\Models\PenjualanDetail;
 use App\Models\Produk;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+// use DB;
 use PDF;
 
 class PenjualanController extends Controller
@@ -18,46 +20,50 @@ class PenjualanController extends Controller
 
     public function data()
     {
-        $penjualan = Penjualan::with('member')->where('diterima', '!=', 0)->orderBy('id_penjualan', 'desc')->get();
-
+        $tanggal = date('Y-m-d');
+        $penjualan = Penjualan::join('penjualan_detail', 'penjualan_detail.id_penjualan','=','penjualan.id_penjualan')->join('users', 'users.id', '=', 'penjualan.id_user')
+        // ->select(DB::raw("SUM(penjualan_detail.subtotal) AS profit"))
+        ->select('penjualan.created_at', 'penjualan.total_item', 'penjualan.bayar', 'penjualan.total_harga', 'penjualan.id_penjualan', 'users.name')
+        // ->sum('profit')
+        ->groupby('penjualan_detail.id_penjualan')
+        ->where('penjualan.diterima', '!=', 0)
+        ->where('penjualan.created_at', 'LIKE', "%$tanggal%")
+        ->orderBy('penjualan.id_penjualan', 'desc')
+        ->get();
         return datatables()
             ->of($penjualan)
             ->addIndexColumn()
+            ->addColumn('tanggal', function ($penjualan) {
+                return tanggal_indonesia($penjualan->created_at, false);
+            })
+            ->addColumn('waktu', function ($penjualan) {
+                return jam_indonesia($penjualan->created_at);
+            })
             ->addColumn('total_item', function ($penjualan) {
                 return format_uang($penjualan->total_item);
-            })
-            ->addColumn('total_harga', function ($penjualan) {
-                return 'Rp. ' . format_uang($penjualan->total_harga);
             })
             ->addColumn('bayar', function ($penjualan) {
                 return 'Rp. ' . format_uang($penjualan->bayar);
             })
-            ->addColumn('tanggal', function ($penjualan) {
-                return tanggal_indonesia($penjualan->created_at, false);
-            })
-            ->addColumn('kode_member', function ($penjualan) {
-            return jam_indonesia($penjualan->created_at);
-            })
-            ->addColumn('kode_member', function ($penjualan) {
-                return jam_indonesia($penjualan->created_at);
-            })
-            ->editColumn('diskon', function ($penjualan) {
-                return $penjualan->diskon . '%';
-            })
+            // ->addColumn('profit', function ($penjualan) {
+            //     return 'Rp. ' . format_uang($penjualan->profit);
+            // })
+            // ->editColumn('diskon', function ($penjualan) {
+            //     return $penjualan->diskon . '%';
+            // })
             ->editColumn('kasir', function ($penjualan) {
-                return $penjualan->user->name ?? '';
+                return $penjualan->name ?? '';
             })
             ->addColumn('aksi', function ($penjualan) {
                 return '
                 <div class="btn-group">
-                    <button onclick="notaKecil2(`' . route('transaksi.nota_kecil2', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-secondary btn-flat"><i class="fa fa-print" aria-hidden="true"></i></button>  
-
+                    <button onclick="notaKecil2(`' . route('transaksi.nota_kecil2', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-secondary btn-flat"><i class="fa fa-print" aria-hidden="true"></i></button>
                    <button onclick="showDetail(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-info btn-flat"><i class="fa fa-eye"></i></button>  
                     <button onclick="deleteData(`' . route('penjualan.destroy', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 ';
             })
-            ->rawColumns(['aksi', 'kode_member'])
+            ->rawColumns(['aksi', 'kode_member','profit'])
             ->make(true);
     }
 
@@ -115,9 +121,7 @@ class PenjualanController extends Controller
         return datatables()
             ->of($detail)
             ->addIndexColumn()
-            // ->addColumn('kode_produk', function ($detail) {
-            //     return '<span class="label label-success">' . $detail->produk->kode_produk . '</span>';
-            // })
+           
             ->addColumn('nama_produk', function ($detail) {
             $jenis = $detail->jenis;
             if ($jenis == "grosir") {
@@ -172,16 +176,13 @@ class PenjualanController extends Controller
         $setting = Setting::first();
         $penjualan = Penjualan::latest('id_penjualan')->first();
         $detail = PenjualanDetail::with('produk')->where('id_penjualan', $penjualan->id_penjualan)->get();
-        // $detail    = PenjualanDetail::with('produk')->where('id_penjualan', $penjualan->id_penjualan)->get();
-        // dd($detail);
-
         return view('penjualan.selesai', compact('setting', 'penjualan', 'detail'));
     }
 
     public function notaKecil()
     {
         $setting = Setting::first();
-        // dd($setting);
+
         $penjualan = Penjualan::find(session('id_penjualan'));
         if (!$penjualan) {
             abort(404);
@@ -196,8 +197,6 @@ class PenjualanController extends Controller
     public function notaKecil2($id)
     {
         $setting = Setting::first();
-        // $id = 5;
-        // dd($id);
 
         $penjualan = Penjualan::find($id);
         if (!$penjualan) {

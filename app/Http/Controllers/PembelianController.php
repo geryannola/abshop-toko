@@ -10,16 +10,29 @@ use App\Models\Supplier;
 
 class PembelianController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $supplier = Supplier::orderBy('nama')->get();
 
-        return view('pembelian.index', compact('supplier'));
+        $tanggalAwal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
+        // $tanggalAwal = date('Y-m-d');
+        $tanggalAkhir = date('Y-m-d');
+
+        if ($request->has('tanggal_awal') && $request->tanggal_awal != "" && $request->has('tanggal_akhir') && $request->tanggal_akhir) {
+            $tanggalAwal = $request->tanggal_awal;
+            $tanggalAkhir = $request->tanggal_akhir;
+        }
+
+        return view('pembelian.index', compact('supplier', 'tanggalAwal', 'tanggalAkhir'));
     }
 
-    public function data()
+    public function data($awal, $akhir)
     {
-        $pembelian = Pembelian::orderBy('id_pembelian', 'desc')->get();
+        $tanggalAwal = date('Y-m-d 00:00:00', strtotime($awal));
+        $tanggalAkhir = date('Y-m-d 23:59:59', strtotime($akhir));
+        $pembelian = Pembelian::orderBy('id_pembelian', 'desc')
+            ->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
+            ->get();
 
         return datatables()
             ->of($pembelian)

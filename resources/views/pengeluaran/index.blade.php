@@ -1,12 +1,16 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Pengeluaran
+Daftar Pengeluaran {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
 @endsection
 
+@push('css')
+<link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+@endpush
+
 @section('breadcrumb')
-    @parent
-    <li class="active">Daftar Pengeluaran</li>
+@parent
+<li class="active">Daftar Pengeluaran</li>
 @endsection
 
 @section('content')
@@ -14,10 +18,12 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
-                <button onclick="addForm('{{ route('pengeluaran.store') }}')" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Tambah</button>
+                <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Ubah
+                    Periode</button>
+                <button onclick="addForm('{{route('pengeluaran.store')}}')" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Tambah</button>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered">
+                <table class="table-stiped table-bordered table">
                     <thead>
                         <th width="5%">No</th>
                         <th>Tanggal</th>
@@ -32,30 +38,46 @@
 </div>
 
 @includeIf('pengeluaran.form')
+@includeIf('pengeluaran.form2')
 @endsection
 
 @push('scripts')
+<script src="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
+</script>
 <script>
     let table;
 
-    $(function () {
+    $(function() {
         table = $('.table').DataTable({
             processing: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('pengeluaran.data') }}',
+                url: "{{ route('pengeluaran.data',[$tanggalAwal, $tanggalAkhir]) }}",
             },
-            columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'created_at'},
-                {data: 'deskripsi'},
-                {data: 'nominal'},
-                {data: 'aksi', searchable: false, sortable: false},
+            columns: [{
+                    data: 'DT_RowIndex',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    data: 'created_at'
+                },
+                {
+                    data: 'deskripsi'
+                },
+                {
+                    data: 'nominal'
+                },
+                {
+                    data: 'aksi',
+                    searchable: false,
+                    sortable: false
+                },
             ]
         });
 
-        $('#modal-form').validator().on('submit', function (e) {
-            if (! e.preventDefault()) {
+        $('#modal-form').validator().on('submit', function(e) {
+            if (!e.preventDefault()) {
                 $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
                     .done((response) => {
                         $('#modal-form').modal('hide');
@@ -66,6 +88,10 @@
                         return;
                     });
             }
+        });
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true
         });
     });
 
@@ -113,6 +139,10 @@
                     return;
                 });
         }
+    }
+
+    function updatePeriode() {
+        $('#modal-form2').modal('show');
     }
 </script>
 @endpush

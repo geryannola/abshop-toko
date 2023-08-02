@@ -11,16 +11,27 @@ use PDF;
 
 class PenjualanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('penjualan.index');
+        // $tanggalAwal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
+        $tanggalAwal = date('Y-m-d');
+        $tanggalAkhir = date('Y-m-d');
+
+        if ($request->has('tanggal_awal') && $request->tanggal_awal != "" && $request->has('tanggal_akhir') && $request->tanggal_akhir) {
+            $tanggalAwal = $request->tanggal_awal;
+            $tanggalAkhir = $request->tanggal_akhir;
+        }
+
+        return view('penjualan.index', compact('tanggalAwal', 'tanggalAkhir'));
     }
 
-    public function data()
+    public function data($awal, $akhir)
     {
-        $tanggal = date('Y-m-d');
+        $tanggalAwal = date('Y-m-d 00:00:00', strtotime($awal));
+        $tanggalAkhir = date('Y-m-d 23:59:59', strtotime($akhir));
         $penjualan = Penjualan::with('member')->where('diterima', '!=', 0)
         // ->where('created_at', 'LIKE', "%$tanggal%")
+        ->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
         ->orderBy('id_penjualan', 'desc')->get();
         return datatables()
             ->of($penjualan)

@@ -1,12 +1,16 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Pembelian
+Daftar Pembelian {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
 @endsection
 
+@push('css')
+<link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+@endpush
+
 @section('breadcrumb')
-    @parent
-    <li class="active">Daftar Pembelian</li>
+@parent
+<li class="active">Daftar Pembelian</li>
 @endsection
 
 @section('content')
@@ -14,13 +18,17 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
-                <button onclick="addForm()" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Transaksi Baru</button>
-                @empty(! session('id_pembelian'))
+                <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i>
+                    Ubah
+                    Periode</button>
+                <button onclick="addForm()" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i>
+                    Transaksi Baru</button>
+                @empty(!session('id_pembelian'))
                 <a href="{{ route('pembelian_detail.index') }}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-pencil"></i> Transaksi Aktif</a>
                 @endempty
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered table-pembelian">
+                <table class="table-stiped table-bordered table-pembelian table">
                     <thead>
                         <th width="5%">No</th>
                         <th>Tanggal</th>
@@ -38,44 +46,81 @@
 
 @includeIf('pembelian.supplier')
 @includeIf('pembelian.detail')
+@includeIf('pembelian.form')
 @endsection
 
 @push('scripts')
+<script src="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
+</script>
 <script>
     let table, table1;
 
-    $(function () {
+    $(function() {
         table = $('.table-pembelian').DataTable({
             processing: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('pembelian.data') }}',
+                url: "{{ route('pembelian.data', [$tanggalAwal, $tanggalAkhir]) }}",
             },
-            columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'tanggal'},
-                {data: 'supplier'},
-                {data: 'total_item'},
-                {data: 'total_harga'},
-                {data: 'bayar'},
-                {data: 'aksi', searchable: false, sortable: false},
+            columns: [{
+                    data: 'DT_RowIndex',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    data: 'tanggal'
+                },
+                {
+                    data: 'supplier'
+                },
+                {
+                    data: 'total_item'
+                },
+                {
+                    data: 'total_harga'
+                },
+                {
+                    data: 'bayar'
+                },
+                {
+                    data: 'aksi',
+                    searchable: false,
+                    sortable: false
+                },
             ]
         });
 
         $('.table-supplier').DataTable();
         table1 = $('.table-detail').DataTable({
-            processing: true,
-            bSort: false,
-            dom: 'Brt',
-            columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'kode_produk'},
-                {data: 'nama_produk'},
-                {data: 'harga_beli'},
-                {data: 'jumlah'},
-                {data: 'subtotal'},
-            ]
-        })
+                processing: true,
+                bSort: false,
+                dom: 'Brt',
+                columns: [{
+                        data: 'DT_RowIndex',
+                        searchable: false,
+                        sortable: false
+                    },
+                    {
+                        data: 'kode_produk'
+                    },
+                    {
+                        data: 'nama_produk'
+                    },
+                    {
+                        data: 'harga_beli'
+                    },
+                    {
+                        data: 'jumlah'
+                    },
+                    {
+                        data: 'subtotal'
+                    },
+                ]
+            }),
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
     });
 
     function addForm() {
@@ -103,6 +148,10 @@
                     return;
                 });
         }
+    }
+
+    function updatePeriode() {
+        $('#modal-form').modal('show');
     }
 </script>
 @endpush

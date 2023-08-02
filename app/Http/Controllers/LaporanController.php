@@ -41,15 +41,10 @@ class LaporanController extends Controller
             $total_penjualan = Penjualan::where('created_at', 'LIKE', "%$tanggal%")->sum('bayar');
             $total_pembelian = Pembelian::where('created_at', 'LIKE', "%$tanggal%")->sum('bayar');
             $total_pengeluaran = Pengeluaran::where('created_at', 'LIKE', "%$tanggal%")->sum('nominal');
-            // $total_profit = Pengeluaran::where('created_at', 'LIKE', "%$tanggal%")->sum('nominal');
 
             $profit = PenjualanDetail::JOIN('penjualan', 'penjualan.id_penjualan', '=', 'penjualan_detail.id_penjualan')->where('penjualan_detail.created_at', 'LIKE', "%$tanggal%")->where('penjualan.diterima', '!=', 0)
             ->sum(DB::raw('penjualan_detail.subtotal-(penjualan_detail.jumlah/penjualan_detail.jml_kemasan*penjualan_detail.harga_beli)'));
-            // $untung = PenjualanDetail::JOIN('penjualan', 'penjualan.id_penjualan', '=', 'penjualan_detail.id_penjualan')->where('penjualan_detail.created_at', 'LIKE', "%$tanggal_akhir%")->where('penjualan.diterima', '!=', 0)
-            // ->sum(DB::raw('penjualan_detail.subtotal-(penjualan_detail.jumlah/penjualan_detail.jml_kemasan*penjualan_detail.harga_beli)'));
-
-
-
+        
             $pendapatan = $total_penjualan - $total_pembelian - $total_pengeluaran;
             $total_pendapatan += $pendapatan;
             $total_profit += $profit;

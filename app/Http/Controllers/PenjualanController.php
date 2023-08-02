@@ -24,10 +24,9 @@ class PenjualanController extends Controller
         $penjualan = Penjualan::join('penjualan_detail', 'penjualan_detail.id_penjualan','=','penjualan.id_penjualan')->join('users', 'users.id', '=', 'penjualan.id_user')
         // ->select(DB::raw("SUM(penjualan_detail.subtotal) AS profit"))
         ->select('penjualan.created_at', 'penjualan.total_item', 'penjualan.bayar', 'penjualan.total_harga', 'penjualan.id_penjualan', 'users.name')
-        // ->sum('profit')
         ->groupby('penjualan_detail.id_penjualan')
         ->where('penjualan.diterima', '!=', 0)
-        ->where('penjualan.created_at', 'LIKE', "%$tanggal%")
+        // ->where('penjualan.created_at', 'LIKE', "%$tanggal%")
         ->orderBy('penjualan.id_penjualan', 'desc')
         ->get();
         return datatables()

@@ -123,13 +123,15 @@ Transaksi Penjualan
                                 <div class="col-lg-8">
                                     <input type="number" id="diterima" class="form-control" name="diterima" value="{{ $penjualan->diterima ?? '' }}">
                                     <div class="d-flex justify-content-between">
-                                        <a class="btn btn-primary btn-sm btn-limaribu">5.000</a>
-                                        <a class="btn btn-primary btn-sm btn-sepuluh">10.000</a>
-                                        <a class="btn btn-primary btn-sm btn-duapuluh">20.000</a>
-                                        <a class="btn btn-primary btn-sm btn-limapuluh">50.000</a>
-                                        <a class="btn btn-primary btn-sm btn-seratus">100.000</a>
-                                        <a class="btn btn-primary btn-sm btn-nol">000</a>
-                                        <a class="btn btn-primary btn-sm btn-bayar" id="tampil-terima"></a>
+                                        <a class="btn btn-warning btn-sm btn-limaribu">5.000</a>
+                                        <a class="btn btn-warning btn-sm btn-sepuluh">10.000</a>
+                                        <a class="btn btn-warning btn-sm btn-duapuluh">20.000</a>
+                                        <a class="btn btn-warning btn-sm btn-limapuluh">50.000</a>
+                                        <a class="btn btn-warning btn-sm btn-seratus">100.000</a>
+                                        <a class="btn btn-success btn-sm btn-nol2">00</a>
+                                        <a class="btn btn-success btn-sm btn-nol3">000</a>
+                                        <a class="btn btn-info btn-sm btn-bayar" id="tampil-terima"></a>
+                                        <a class="btn btn-danger btn-sm btn-hapus">Hapus</a>
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +162,7 @@ Transaksi Penjualan
     let table, table2;
 
     $(function() {
-        
+
         $('body').addClass('sidebar-collapse');
 
         table = $('.table-penjualan').DataTable({
@@ -281,40 +283,63 @@ Transaksi Penjualan
         });
 
         $(".btn-limaribu").click(function() {
-            $("#diterima").val("5000");
+            var nilai = parseInt($("#diterima").val()) + 5000;
+            $("#diterima").val(nilai);
+            loadForm($('#diskon').val(), $("#diterima").val());
             return;
         });
 
         $(".btn-sepuluh").click(function() {
-            $("#diterima").val("10000");
+            var nilai = parseInt($("#diterima").val()) + 10000;
+            $("#diterima").val(nilai);
+            loadForm($('#diskon').val(), $("#diterima").val());
             return;
         });
 
         $(".btn-duapuluh").click(function() {
-            $("#diterima").val("20000");
+            var nilai = parseInt($("#diterima").val()) + 20000;
+            $("#diterima").val(nilai);
+            loadForm($('#diskon').val(), $("#diterima").val());
             return;
         });
 
         $(".btn-limapuluh").click(function() {
-            $("#diterima").val("50000");
+            var nilai = parseInt($("#diterima").val()) + 50000;
+            $("#diterima").val(nilai);
+            loadForm($('#diskon').val(), $("#diterima").val());
             return;
         });
 
         $(".btn-seratus").click(function() {
-            $("#diterima").val("100000");
+            var nilai = parseInt($("#diterima").val()) + 100000;
+            $("#diterima").val(nilai);
+            loadForm($('#diskon').val(), $("#diterima").val());
             return;
         });
-        $(".btn-nol").click(function() {
-
-            $("#diterima").val();
+        $(".btn-nol2").click(function() {
+            var nilai = $("#diterima").val() + '00';
+            $("#diterima").val(nilai);
+            loadForm($('#diskon').val(), $("#diterima").val());
+            return;
+        });
+        $(".btn-nol3").click(function() {
+            var nilai = $("#diterima").val() + '000';
+            $("#diterima").val(nilai);
+            loadForm($('#diskon').val(), $("#diterima").val());
             return;
         });
         $(".btn-bayar").click(function() {
-            // $("#diterima").val(response.bayarrp);
-
-            $("#diterima").val();
+            $("#diterima").val($('#bayar').val());
+            loadForm($('#diskon').val(), $("#diterima").val());
             return;
         });
+        $(".btn-hapus").click(function() {
+            // $("#diterima").val($('#bayar').val('0'));
+            $("#diterima").val('0');
+            loadForm($('#diskon').val(), $("#diterima").val());
+            return;
+        });
+
     });
     // $(document).ready(function() {
 

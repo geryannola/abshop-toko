@@ -30,7 +30,7 @@ class PenjualanController extends Controller
         $tanggalAwal = date('Y-m-d 00:00:00', strtotime($awal));
         $tanggalAkhir = date('Y-m-d 23:59:59', strtotime($akhir));
         // $penjualan = Penjualan::with('member')->where('diterima', '!=', 0)
-        $penjualan = Penjualan::with('member')->where('id_user', '!=', '1')
+        $penjualan = Penjualan::with('member')
         // ->where('created_at', 'LIKE', "%$tanggal%")
         ->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
         ->orderBy('id_penjualan', 'desc')->get();

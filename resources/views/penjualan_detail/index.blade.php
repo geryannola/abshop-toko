@@ -122,20 +122,46 @@ Transaksi Penjualan
                                 <label for="diterima" class="col-lg-2 control-label">Diterima</label>
                                 <div class="col-lg-8">
                                     <input type="number" id="diterima" class="form-control" name="diterima" value="{{ $penjualan->diterima ?? '' }}">
-                                    <div class="d-flex justify-content-between">
-                                        <a class="btn btn-warning btn-sm btn-limaratus">500</a>
-                                        <a class="btn btn-warning btn-sm btn-seribu">1.000</a>
-                                        <a class="btn btn-warning btn-sm btn-duaribu">2.000</a>
-                                        <a class="btn btn-warning btn-sm btn-limaribu">5.000</a>
-                                        <a class="btn btn-warning btn-sm btn-sepuluh">10.000</a>
-                                        <a class="btn btn-warning btn-sm btn-duapuluh">20.000</a>
-                                        <a class="btn btn-warning btn-sm btn-limapuluh">50.000</a>
-                                        <a class="btn btn-warning btn-sm btn-seratus">100.000</a>
-                                        <a class="btn btn-success btn-sm btn-nol2">00</a>
-                                        <a class="btn btn-success btn-sm btn-nol3">000</a>
-                                        <a class="btn btn-info btn-sm btn-bayar" id="tampil-terima"></a>
-                                        <a class="btn btn-danger btn-sm btn-hapus">Hapus</a>
-                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <!-- <div class="d-flex"> -->
+                                    <a class="btn btn-warning btn-lg btn-block btn-limaratus pb-8">500</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-warning btn-lg btn-block btn-seribu">1.000</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-warning btn-lg btn-block btn-duaribu">2.000</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-warning btn-lg btn-block btn-limaribu">5.000</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-warning btn-lg btn-block btn-sepuluh">10.000</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-warning btn-lg btn-block btn-duapuluh">20.000</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-warning btn-lg btn-block btn-limapuluh">50.000</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-warning btn-lg btn-block btn-seratus">100.000</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-success btn-lg btn-block btn-nol2">00</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-success btn-lg btn-block btn-nol3">000</a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-info btn-lg btn-block btn-bayar" id="tampil-terima"></a>
+                                </div>
+                                <div class="col-xs-4 col-sm-2 col-lg-3">
+                                    <a class="btn btn-danger btn-lg btn-block btn-hapus">Hapus</a>
+                                    <!-- </div> -->
                                 </div>
                             </div>
                             <div class=" form-group row">

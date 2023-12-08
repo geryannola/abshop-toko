@@ -7,7 +7,7 @@
                 <h4 class="modal-title">Pilih Member</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-striped table-bordered table-member">
+                <table class="table-striped table-bordered table-member table">
                     <thead>
                         <th width="5%">No</th>
                         <th>Nama</th>
@@ -18,13 +18,13 @@
                     <tbody>
                         @foreach ($member as $key => $item)
                             <tr>
-                                <td width="5%">{{ $key+1 }}</td>
+                                <td width="5%">{{ $key + 1 }}</td>
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ $item->telepon }}</td>
                                 <td>{{ $item->alamat }}</td>
                                 <td>
                                     <a href="#" class="btn btn-primary btn-xs btn-flat"
-                                        onclick="pilihMember('{{ $item->id_member }}', '{{ $item->kode_member }}')">
+                                        onclick="pilihMember('{{ $item->id_member }}', '{{ $item->kode_member }}', '{{ $item->diskon }}')">
                                         <i class="fa fa-check-circle"></i>
                                         Pilih
                                     </a>

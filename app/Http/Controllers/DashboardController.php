@@ -19,10 +19,9 @@ class DashboardController extends Controller
     public function index()
     {
         $kategori = Kategori::count();
-        $produk = Produk::count();
+        $produk = Produk::where('stok', '>', 0)->count();
         $produkStok = Produk::orderByRaw('harga_beli * stok / jml_kemasan DESC')->get();
-        // $produkStok = Produk::select(DB::raw('sum(stok - stok_buffer) as sisa'))->get();
-        // dd($produkStok);
+
         $supplier = Supplier::count();
         $member = Member::count();
         $nilaiStok = array();
@@ -34,12 +33,12 @@ class DashboardController extends Controller
         $penjualanHari = Penjualan::where('created_at', 'LIKE', "%$tanggal_akhir%")->sum('bayar');
         $penjualanBulan = Penjualan::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
         $pembelianBulan = Pembelian::where('created_at', 'LIKE', "%$tanggal_bulan%")->sum('bayar');
-        $nilaiStok = Produk::select(DB::raw('sum(harga_beli*stok/jml_kemasan) as harga'))->first('harga');        
-        $untung = PenjualanDetail::JOIN('penjualan','penjualan.id_penjualan','=', 'penjualan_detail.id_penjualan')->where('penjualan_detail.created_at', 'LIKE', "%$tanggal_akhir%")->where('penjualan.diterima','!=',0)
-        ->sum(DB::raw('penjualan_detail.subtotal-(penjualan_detail.jumlah/penjualan_detail.jml_kemasan*penjualan_detail.harga_beli)'));
-        
+        $nilaiStok = Produk::select(DB::raw('sum(harga_beli*stok/jml_kemasan) as harga'))->where('stok', '>', 0)->first('harga');
+        $untung = PenjualanDetail::JOIN('penjualan', 'penjualan.id_penjualan', '=', 'penjualan_detail.id_penjualan')->where('penjualan_detail.created_at', 'LIKE', "%$tanggal_akhir%")->where('penjualan.diterima', '!=', 0)
+            ->sum(DB::raw('penjualan_detail.subtotal-(penjualan_detail.jumlah/penjualan_detail.jml_kemasan*penjualan_detail.harga_beli)'));
+
         $untung = round($untung, 0);
-        
+
         // $untung = PenjualanDetail::With('produk')->where('created_at', 'LIKE', "%$tanggal_akhir%")
         // ->select(DB::raw('sum(subtotal-(jumlah/jml_kemasan*harga_beli)) AS untung', 'harga_beli'))
         // ->first('untung');

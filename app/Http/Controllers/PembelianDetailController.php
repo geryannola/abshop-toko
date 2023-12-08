@@ -81,6 +81,8 @@ class PembelianDetailController extends Controller
         $detail->jml_kemasan = $produk->jml_kemasan;
         $detail->jumlah = $produk->jml_kemasan;
         $detail->subtotal = $produk->harga_beli;
+        $detail->stok_akhir = 0;
+        $detail->keluar = 0;
         $detail->save();
 
         return response()->json('Data berhasil disimpan', 200);

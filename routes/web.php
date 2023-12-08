@@ -4,6 +4,7 @@ use App\Http\Controllers\{
     DashboardController,
     KategoriController,
     LaporanController,
+    KartustokController,
     ProdukController,
     MemberController,
     PengeluaranController,
@@ -68,7 +69,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/penjualan/data/{awal}/{akhir}', [PenjualanController::class, 'data'])->name('penjualan.data');
         Route::get('/penjualan/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
         Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
-       
+
         Route::get('/transaksi/nota-kecil2/{id}', [PenjualanController::class, 'notaKecil2'])->name('transaksi.nota_kecil2');
     });
 
@@ -89,6 +90,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/data/{awal}/{akhir}', [LaporanController::class, 'data'])->name('laporan.data');
         Route::get('/laporan/pdf/{awal}/{akhir}', [LaporanController::class, 'exportPDF'])->name('laporan.export_pdf');
+
+        Route::get('/kartustok', [KartustokController::class, 'index'])->name('kartustok.index');
+        Route::get('/kartustok/data/{produk}/{awal}/{akhir}', [KartustokController::class, 'data'])->name('kartustok.data');
+        Route::get('/kartustok/pdf/{awal}/{akhir}', [KartustokController::class, 'exportPDF'])->name('kartustok.export_pdf');
 
         Route::get('/user/data', [UserController::class, 'data'])->name('user.data');
         Route::resource('/user', UserController::class);

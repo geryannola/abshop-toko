@@ -2,34 +2,47 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Pilih Produk</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-striped table-bordered table-produk">
+                <table class="table-striped table-bordered table-produk table">
                     <thead>
+                        <th>Batch</th>
                         <th>Nama</th>
                         <th>Harga Jual <br> Stok</th>
                         <th><i class="fa fa-cog"></i></th>
                     </thead>
                     <tbody>
                         @foreach ($produk as $key => $item)
-                        <tr>
+                            <tr>
 
-                            <td> {{ $item->nama_produk }} ({{ $item->jml_kemasan }})<br>Rp. {{ format_uang($item->harga_beli) }} </td>
-                            <td><span class="label label-success">{{format_uang($item->harga_jual)}}</span> / <span class="label label-warning">{{format_uang($item->harga_ecer)}}</span><br> Stok : {{ format_uang($item->stok/$item->jml_kemasan) }} / {{ format_uang($item->stok) }}</td>
-                            <td>
-                                <a href="#" class="btn btn-success btn-xs btn-flat" onclick="pilihProduk('{{ $item->id_produk }}', '{{ $item->kode_produk }} - {{ $item->nama_produk }}')">
-                                    <i class="fa fa-check-circle"></i>
-                                    Grosir
-                                </a>
-                                <a href="#" class="btn btn-warning btn-xs btn-flat" onclick="pilihProdukEcer('{{ $item->id_produk }}', '{{ $item->kode_produk }} - {{ $item->nama_produk }}')">
+                                <td> {{ $item->batch }}
+                                </td>
+                                <td> {{ $item->nama_produk }} ({{ $item->jml_kemasan }})<br>Rp.
+                                    {{ format_uang($item->harga_beli) }}
+                                </td>
+                                <td><span class="label label-success">{{ format_uang($item->harga_jual) }}</span> /
+                                    <span class="label label-warning">{{ format_uang($item->harga_ecer) }}</span><br>
+                                    Stok : {{ format_uang(floor($item->stok / $item->jml_kemasan)) }} /
+                                    {{ format_uang($item->stok - floor($item->stok / $item->jml_kemasan) * $item->jml_kemasan) }}
+                                </td>
+                                <td>
+                                    @if ($item->stok / $item->jml_kemasan >= 1)
+                                        <a href="#" class="btn btn-success btn-xs btn-flat"
+                                            onclick="pilihProduk('{{ $item->id_produk }}', '{{ $item->batch }} - {{ $item->nama_produk }}')">
+                                            <i class="fa fa-check-circle"></i>
+                                            Grosir
+                                        </a>
+                                    @endif
+                                    <a href="#" class="btn btn-warning btn-xs btn-flat"
+                                        onclick="pilihProdukEcer('{{ $item->id_produk }}', '{{ $item->batch }} - {{ $item->nama_produk }}')">
+                                        Eceran
+                                    </a>
 
-                                    Eceran
-                                </a>
-
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

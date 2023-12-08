@@ -1,157 +1,162 @@
 @extends('layouts.master')
 
 @section('title')
-Daftar Pembelian {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
+    Daftar Pembelian {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
 @endsection
 
 @push('css')
-<link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 @endpush
 
 @section('breadcrumb')
-@parent
-<li class="active">Daftar Pembelian</li>
+    @parent
+    <li class="active">Daftar Pembelian</li>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i>
-                    Ubah
-                    Periode</button>
-                <button onclick="addForm()" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i>
-                    Transaksi Baru</button>
-                @empty(!session('id_pembelian'))
-                <a href="{{ route('pembelian_detail.index') }}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-pencil"></i> Transaksi Aktif</a>
-                @endempty
-            </div>
-            <div class="box-body table-responsive">
-                <table class="table-stiped table-bordered table-pembelian table">
-                    <thead>
-                        <th width="5%">No</th>
-                        <th>Tanggal</th>
-                        <th>Supplier</th>
-                        <th>Total Item</th>
-                        <th>Total Harga</th>
-                        <th>Total Bayar</th>
-                        <th width="15%"><i class="fa fa-cog"></i></th>
-                    </thead>
-                </table>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i>
+                        Ubah
+                        Periode</button>
+                    <button onclick="addForm()" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i>
+                        Transaksi Baru</button>
+                    @empty(!session('id_pembelian'))
+                        <a href="{{ route('pembelian_detail.index') }}" class="btn btn-info btn-xs btn-flat"><i
+                                class="fa fa-pencil"></i> Transaksi Aktif</a>
+                    @endempty
+                </div>
+                <div class="box-body table-responsive">
+                    <table class="table-stiped table-bordered table-pembelian table">
+                        <thead>
+                            <th width="5%">No</th>
+                            <th>Tanggal</th>
+                            <th>Supplier</th>
+                            <th>Total Item</th>
+                            <th>Total Harga</th>
+                            <th>Total Bayar</th>
+                            <th width="15%"><i class="fa fa-cog"></i></th>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@includeIf('pembelian.supplier')
-@includeIf('pembelian.detail')
-@includeIf('pembelian.form')
+    @includeIf('pembelian.supplier')
+    @includeIf('pembelian.detail')
+    @includeIf('pembelian.form')
 @endsection
 
 @push('scripts')
-<script src="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
-</script>
-<script>
-    let table, table1;
+    <script src="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
+    </script>
+    <script>
+        let table, table1;
 
-    $(function() {
-        table = $('.table-pembelian').DataTable({
-            processing: true,
-            autoWidth: false,
-            ajax: {
-                url: "{{ route('pembelian.data', [$tanggalAwal, $tanggalAkhir]) }}",
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    searchable: false,
-                    sortable: false
-                },
-                {
-                    data: 'tanggal'
-                },
-                {
-                    data: 'supplier'
-                },
-                {
-                    data: 'total_item'
-                },
-                {
-                    data: 'total_harga'
-                },
-                {
-                    data: 'bayar'
-                },
-                {
-                    data: 'aksi',
-                    searchable: false,
-                    sortable: false
-                },
-            ]
-        });
-
-        $('.table-supplier').DataTable();
-        table1 = $('.table-detail').DataTable({
+        $(function() {
+            table = $('.table-pembelian').DataTable({
                 processing: true,
-                bSort: false,
-                dom: 'Brt',
+                autoWidth: false,
+                ajax: {
+                    url: "{{ route('pembelian.data', [$tanggalAwal, $tanggalAkhir]) }}",
+                },
                 columns: [{
                         data: 'DT_RowIndex',
                         searchable: false,
                         sortable: false
                     },
                     {
-                        data: 'kode_produk'
+                        data: 'tanggal'
                     },
                     {
-                        data: 'nama_produk'
+                        data: 'supplier'
                     },
                     {
-                        data: 'harga_beli'
+                        data: 'total_item'
                     },
                     {
-                        data: 'jumlah'
+                        data: 'total_harga'
                     },
                     {
-                        data: 'subtotal'
+                        data: 'bayar'
+                    },
+                    {
+                        data: 'aksi',
+                        searchable: false,
+                        sortable: false
                     },
                 ]
-            }),
-            $('.datepicker').datepicker({
-                format: 'yyyy-mm-dd',
-                autoclose: true
             });
-    });
 
-    function addForm() {
-        $('#modal-supplier').modal('show');
-    }
-
-    function showDetail(url) {
-        $('#modal-detail').modal('show');
-
-        table1.ajax.url(url);
-        table1.ajax.reload();
-    }
-
-    function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'delete'
-                })
-                .done((response) => {
-                    table.ajax.reload();
-                })
-                .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
-                    return;
+            $('.table-supplier').DataTable();
+            table1 = $('.table-detail').DataTable({
+                    processing: true,
+                    bSort: false,
+                    dom: 'Brt',
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            searchable: false,
+                            sortable: false
+                        },
+                        {
+                            data: 'kode_produk'
+                        },
+                        {
+                            data: 'nama_produk'
+                        },
+                        {
+                            data: 'harga_beli'
+                        },
+                        {
+                            data: 'jumlah'
+                        },
+                        {
+                            data: 'subtotal'
+                        },
+                        {
+                            data: 'stok_akhir'
+                        },
+                    ]
+                }),
+                $('.datepicker').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true
                 });
-        }
-    }
+        });
 
-    function updatePeriode() {
-        $('#modal-form').modal('show');
-    }
-</script>
+        function addForm() {
+            $('#modal-supplier').modal('show');
+        }
+
+        function showDetail(url) {
+            $('#modal-detail').modal('show');
+
+            table1.ajax.url(url);
+            table1.ajax.reload();
+        }
+
+        function deleteData(url) {
+            if (confirm('Yakin ingin menghapus data terpilih?')) {
+                $.post(url, {
+                        '_token': $('[name=csrf-token]').attr('content'),
+                        '_method': 'delete'
+                    })
+                    .done((response) => {
+                        table.ajax.reload();
+                    })
+                    .fail((errors) => {
+                        alert('Tidak dapat menghapus data');
+                        return;
+                    });
+            }
+        }
+
+        function updatePeriode() {
+            $('#modal-form').modal('show');
+        }
+    </script>
 @endpush

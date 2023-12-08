@@ -7,7 +7,7 @@
                 <h4 class="modal-title">Detail Pembelian</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-striped table-bordered table-detail">
+                <table class="table-striped table-bordered table-detail table">
                     <thead>
                         <th width="5%">No</th>
                         <th>Batch</th>
@@ -15,6 +15,7 @@
                         <th>Harga</th>
                         <th>Jumlah</th>
                         <th>Subtotal</th>
+                        <th>Stok</th>
                     </thead>
                 </table>
             </div>

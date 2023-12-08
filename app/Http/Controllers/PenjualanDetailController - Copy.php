@@ -13,7 +13,7 @@ class PenjualanDetailController extends Controller
 {
     public function index()
     {
-        $produk = Produk::orderBy('nama_produk')->where('stok', '>', 0)->get();
+        $produk = Produk::orderBy('nama_produk')->where('stok','>','0')->get();
         $member = Member::orderBy('nama')->get();
         $diskon = Setting::first()->diskon ?? 0;
 
@@ -51,17 +51,12 @@ class PenjualanDetailController extends Controller
                 $label = "label label-warning";
                 $harga = $item->harga_jual;
             }
-            $jml_kemasan = $item->jml_kemasan;
-            $stokreal = $item->produk['stok'];
-            $stok = floor($item->produk['stok'] / $item->jml_kemasan);
-            $sisa = ($item->produk['stok'] - ($stok * $item->jml_kemasan));
-
             $row = array();
             // $row['kode_produk'] = '<span class="' . $label . '">' . $item->produk['kode_produk'] . '</span>';
-            $row['nama_produk'] = '<span class="' . $label . '">' . $item->produk['nama_produk'] . '</span>' . ' (' . $item->produk['jml_kemasan'] . ') Rp.' . format_uang($item->produk['harga_beli']) . ' Rp.' . format_uang($harga) . ' Stok=' . format_uang($stok) . ' / ' . format_uang($sisa);
+            $row['nama_produk'] = '<span class="' . $label . '">' . $item->produk['nama_produk'] . '</span>' . ' (' . $item->produk['jml_kemasan'] . ') Rp.' . format_uang($item->produk['harga_beli']) . ' Rp.' . format_uang($harga) . ' Stok=' . format_uang($item->produk['stok'] / $item->produk['jml_kemasan']) . '/' . format_uang($item->produk['stok']);
 
             $row['harga_jual']  = '<input type="number" class="form-control input-sm harga_jual" data-id="' . $item->id_penjualan_detail . '" value="' . $item->harga_jual . '">';
-            $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_penjualan_detail . '" data-stok="' . $stokreal . '" data-jml_kemasan="' . $jml_kemasan . '" data-jml="' . $item->jumlah / $item->jml_kemasan . '"  value="' . $item->jumlah / $item->jml_kemasan . '">';
+            $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_penjualan_detail . '" data-stok="' . $item->stok / $item->jml_kemasan . '" value="' . $item->jumlah / $item->jml_kemasan . '">';
             $row['subtotal']    = format_uang($item->subtotal);
             $row['aksi']        = '<div class="btn-group">
                                     <button onclick="deleteData(`' . route('transaksi.destroy', $item->id_penjualan_detail) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
@@ -108,7 +103,7 @@ class PenjualanDetailController extends Controller
                 $jml_kemasan = 1;
                 $jumlah = 1;
                 $harga_jual = $produk->harga_ecer;
-                $harga_beli = round($produk->harga_beli / $produk->jml_kemasan);
+                $harga_beli = round($produk->harga_beli/ $produk->jml_kemasan);
             }
             $detail = new PenjualanDetail();
             $detail->id_penjualan = $request->id_penjualan;
@@ -121,7 +116,6 @@ class PenjualanDetailController extends Controller
             $detail->diskon = 0;
             $detail->subtotal = $harga_jual;
             $detail->stok_akhir = 0;
-            $detail->masuk = 0;
             $detail->save();
         } else {
             $detail = PenjualanDetail::find($penjualan->id_penjualan_detail);
@@ -135,7 +129,6 @@ class PenjualanDetailController extends Controller
     public function update(Request $request, $id)
     {
         $detail = PenjualanDetail::find($id);
-
         // if ($request->jumlah * $detail->jml_kemasan <= 500) {
         if ($request->jumlah != NULL) {
             $detail->jumlah = $request->jumlah * $detail->jml_kemasan;

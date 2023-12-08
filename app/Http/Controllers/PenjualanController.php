@@ -31,9 +31,9 @@ class PenjualanController extends Controller
         $tanggalAkhir = date('Y-m-d 23:59:59', strtotime($akhir));
         // $penjualan = Penjualan::with('member')->where('diterima', '!=', 0)
         $penjualan = Penjualan::with('member')
-        // ->where('created_at', 'LIKE', "%$tanggal%")
-        ->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
-        ->orderBy('id_penjualan', 'desc')->get();
+            // ->where('created_at', 'LIKE', "%$tanggal%")
+            ->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
+            ->orderBy('id_penjualan', 'desc')->get();
         return datatables()
             ->of($penjualan)
             ->addIndexColumn()
@@ -62,7 +62,7 @@ class PenjualanController extends Controller
                 return '
                 <div class="btn-group">
                     <button onclick="notaKecil2(`' . route('transaksi.nota_kecil2', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-secondary btn-flat"><i class="fa fa-print" aria-hidden="true"></i></button>
-                   <button onclick="showDetail(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-info btn-flat"><i class="fa fa-eye"></i></button>  
+                   <button onclick="showDetail(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-info btn-flat"><i class="fa fa-eye"></i></button>
                     <button onclick="deleteData(`' . route('penjualan.destroy', $penjualan->id_penjualan) . '`)" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 ';
@@ -98,6 +98,7 @@ class PenjualanController extends Controller
                 $penjualan->diskon = $request->diskon;
                 $penjualan->bayar = $request->bayar;
                 $penjualan->diterima = $request->diterima;
+                $penjualan->no_whatsapp = $request->no_whatsapp;
                 $penjualan->update();
 
                 $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
@@ -108,6 +109,10 @@ class PenjualanController extends Controller
                     $produk = Produk::find($item->id_produk);
                     $produk->stok -= $item->jumlah;
                     $produk->update();
+
+                    $produkDetail = PenjualanDetail::find($item->id_penjualan_detail);
+                    $produkDetail->stok_akhir = $produk->stok;
+                    $produkDetail->update();
                 }
                 return redirect()->route('transaksi.selesai');
             }
@@ -125,15 +130,15 @@ class PenjualanController extends Controller
         return datatables()
             ->of($detail)
             ->addIndexColumn()
-           
+
             ->addColumn('nama_produk', function ($detail) {
-            $jenis = $detail->jenis;
-            if ($jenis == "grosir") {
-                $label = "label label-success";
-            } else {
-                $label = "label label-warning";
-            }
-                return '<span class="'. $label.'">' . strtoupper($detail->jenis) . '</span> ' . $detail->produk->nama_produk;
+                $jenis = $detail->jenis;
+                if ($jenis == "grosir") {
+                    $label = "label label-success";
+                } else {
+                    $label = "label label-warning";
+                }
+                return '<span class="' . $label . '">' . strtoupper($detail->jenis) . '</span> ' . $detail->produk->nama_produk;
             })
             ->addColumn('harga_beli', function ($detail) {
                 return 'Rp. ' . format_uang($detail->harga_beli);
@@ -142,14 +147,19 @@ class PenjualanController extends Controller
                 return 'Rp. ' . format_uang($detail->harga_jual);
             })
             ->addColumn('jumlah', function ($detail) {
-                return format_uang($detail->jumlah/ $detail->jml_kemasan);
+                return format_uang($detail->jumlah / $detail->jml_kemasan);
             })
             ->addColumn('subtotal', function ($detail) {
                 return 'Rp. ' . format_uang($detail->subtotal);
             })
+            ->addColumn('stok_akhir', function ($detail) {
+                $dos = floor($detail->stok_akhir / $detail->jml_kemasan);
+                $sisa = ($detail->stok_akhir - ($dos * $detail->jml_kemasan));
+                return format_uang($dos) . ' / ' . format_uang($sisa);
+            })
             ->addColumn('profit', function ($detail) {
-               
-                $profit = ($detail->subtotal-($detail->jumlah/ $detail->jml_kemasan* $detail->harga_beli));
+
+                $profit = ($detail->subtotal - ($detail->jumlah / $detail->jml_kemasan * $detail->harga_beli));
                 return 'Rp. ' . format_uang($profit);
             })
             ->rawColumns(['nama_produk'])
@@ -207,8 +217,8 @@ class PenjualanController extends Controller
             abort(404);
         }
         $detail = PenjualanDetail::with('produk')
-        ->where('id_penjualan', $id)
-        ->get();
+            ->where('id_penjualan', $id)
+            ->get();
 
         return view('penjualan.nota_kecil', compact('setting', 'penjualan', 'detail'));
     }

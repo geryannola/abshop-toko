@@ -97,6 +97,10 @@ class PembelianController extends Controller
             $produk = Produk::find($item->id_produk);
             $produk->stok += $item->jumlah;
             $produk->update();
+
+            $produkDetail = PembelianDetail::find($item->id_pembelian_detail);
+            $produkDetail->stok_akhir = $produk->stok;
+            $produkDetail->update();
         }
 
         return redirect()->route('pembelian.index');
@@ -123,6 +127,12 @@ class PembelianController extends Controller
             })
             ->addColumn('subtotal', function ($detail) {
                 return 'Rp. ' . format_uang($detail->subtotal);
+            })
+            ->addColumn('stok_akhir', function ($detail) {
+                $dos = floor($detail->stok_akhir / $detail->jml_kemasan);
+                $sisa = ($detail->stok_akhir - ($dos * $detail->jml_kemasan));
+                return format_uang($dos) . ' / ' . format_uang($sisa);
+                // return 'Rp. ' . format_uang($detail->subtotal);
             })
             ->rawColumns(['kode_produk'])
             ->make(true);

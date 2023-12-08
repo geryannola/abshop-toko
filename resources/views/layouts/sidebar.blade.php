@@ -76,6 +76,11 @@
                     <i class="fa fa-file-pdf-o"></i> <span>Laporan</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('kartustok.index') }}">
+                    <i class="fa fa-file-pdf-o"></i> <span>Kartu Stok</span>
+                </a>
+            </li>
             <li class="header">SYSTEM</li>
             <li>
                 <a href="{{ route('user.index') }}">

@@ -31,13 +31,13 @@
                                 <td>
                                     @if ($item->stok / $item->jml_kemasan >= 1)
                                         <a href="#" class="btn btn-success btn-xs btn-flat"
-                                            onclick="pilihProduk('{{ $item->id_produk }}', '{{ $item->batch }} - {{ $item->nama_produk }}')">
+                                            onclick="pilihProduk('{{ $item->id_produk }}', '')">
                                             <i class="fa fa-check-circle"></i>
                                             Grosir
                                         </a>
                                     @endif
                                     <a href="#" class="btn btn-warning btn-xs btn-flat"
-                                        onclick="pilihProdukEcer('{{ $item->id_produk }}', '{{ $item->batch }} - {{ $item->nama_produk }}')">
+                                        onclick="pilihProdukEcer('{{ $item->id_produk }}', '')">
                                         Eceran
                                     </a>
 

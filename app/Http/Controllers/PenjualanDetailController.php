@@ -36,6 +36,7 @@ class PenjualanDetailController extends Controller
     {
         $detail = PenjualanDetail::with('produk')
             ->where('id_penjualan', $id)
+            ->orderBy('id_penjualan_detail', 'DESC')
             ->get();
 
         $data = array();
@@ -171,5 +172,42 @@ class PenjualanDetailController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    public function scan(Request $request)
+    {
+        $produk = Produk::where('batch', $request->kode_produk)->first();
+        if (!$produk) {
+            return redirect()->route('transaksi.index');
+            // return response()->json('Data gagal disimpan', 400);
+        }
+        $penjualan = PenjualanDetail::where('id_penjualan', $request->id_penjualan)->where('id_produk', $produk->id_produk)->first();
+        if (!$penjualan) {
+
+            $jml_kemasan = $produk->jml_kemasan;
+            $jumlah = $produk->jml_kemasan;
+            $harga_jual = $produk->harga_jual;
+            $harga_beli = $produk->harga_beli;
+            $detail = new PenjualanDetail();
+            $detail->id_penjualan = $request->id_penjualan;
+            $detail->id_produk = $produk->id_produk;
+            $detail->harga_jual = $harga_jual;
+            $detail->harga_beli = $harga_beli;
+            $detail->jml_kemasan = $jml_kemasan;
+            $detail->jenis = 'grosir';
+            $detail->jumlah = $jumlah;
+            $detail->diskon = 0;
+            $detail->subtotal = $harga_jual;
+            $detail->stok_akhir = 0;
+            $detail->masuk = 0;
+            $detail->save();
+        } else {
+            $detail = PenjualanDetail::find($penjualan->id_penjualan_detail);
+            $detail->jumlah = $detail->jml_kemasan + $detail->jumlah;
+            $detail->subtotal = $detail->harga_jual * $detail->jumlah / $detail->jml_kemasan;
+            $detail->update();
+        }
+        return redirect()->route('transaksi.index');
+        // return response()->json('Data berhasil disimpan', 200);
     }
 }

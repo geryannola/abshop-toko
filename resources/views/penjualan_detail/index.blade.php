@@ -42,15 +42,15 @@
             <div class="box">
                 <div class="box-body">
 
-                    <form class="form-produk">
-                        @csrf
-                        <div class="alert alert-info alert-dismissible" style="display: none;">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <i class="icon fa fa-check"></i> Perubahan berhasil disimpan
-                        </div>
-                        <div class="form-group row">
-                            <label for="kode_produk" class="col-lg-2">Kode Produk</label>
-                            <div class="col-lg-5">
+                    <div class="alert alert-info alert-dismissible" style="display: none;">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <i class="icon fa fa-check"></i> Perubahan berhasil disimpan
+                    </div>
+                    <div class="form-group row">
+                        <label for="kode_produk" class="col-lg-2">Kode Produk</label>
+                        <div class="col-lg-5">
+                            <form class="form-produk" action="{{ route('transaksi.scan') }}" method="POST">
+                                @csrf
                                 <div class="input-group">
                                     <input type="hidden" name="id_penjualan" id="id_penjualan" value="{{ $id_penjualan }}">
                                     <input type="hidden" name="id_produk" id="id_produk">
@@ -61,9 +61,9 @@
                                                 class="fa fa-arrow-right"></i></button>
                                     </span>
                                 </div>
-                            </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
 
                     <table class="table-stiped table-bordered table-penjualan table">
                         <thead>
@@ -251,6 +251,7 @@
                         $('#diterima').trigger('input');
                     }, 300);
                 });
+            $('#kode_produk').focus();
             table2 = $('.table-produk').DataTable();
 
             $(document).on('input', '.quantity', function() {

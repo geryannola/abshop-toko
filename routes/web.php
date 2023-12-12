@@ -15,7 +15,11 @@ use App\Http\Controllers\{
     SettingController,
     SupplierController,
     UserController,
+    Publics\HomeController,
+    Publics\ProductsController,
 };
+// use App\Http\Controllers\Publics\HomeController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,9 +33,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+// Route::get('/', 'Publics\HomeController@index');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/products', [ProductsController::class, 'index'])->name('products');
+Route::get('/admin', function () {
     return redirect()->route('login');
 });
+// Route::get('/login', function () {
+//     return redirect()->route('login');
+// });
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -75,6 +85,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['middleware' => 'level:1,2'], function () {
         Route::get('/transaksi/baru', [PenjualanController::class, 'create'])->name('transaksi.baru');
+        Route::get('/transaksi/grosir', [PenjualanController::class, 'create'])->name('transaksi.grosir');
         Route::post('/transaksi/simpan', [PenjualanController::class, 'store'])->name('transaksi.simpan');
         Route::get('/transaksi/selesai', [PenjualanController::class, 'selesai'])->name('transaksi.selesai');
         Route::get('/transaksi/nota-kecil', [PenjualanController::class, 'notaKecil'])->name('transaksi.nota_kecil');
@@ -82,6 +93,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/transaksi/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi.data');
         Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PenjualanDetailController::class, 'loadForm'])->name('transaksi.load_form');
+        Route::post('/transaksi/scan', [PenjualanDetailController::class, 'scan'])->name('transaksi.scan');
         Route::resource('/transaksi', PenjualanDetailController::class)
             ->except('create', 'show', 'edit');
     });

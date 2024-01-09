@@ -6,14 +6,16 @@
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group row">
                         <label for="nama_produk" class="col-lg-2 col-lg-offset-1 control-label">Nama</label>
                         <div class="col-lg-6">
-                            <input type="text" name="nama_produk" id="nama_produk" class="form-control" required autofocus>
+                            <input type="text" name="nama_produk" id="nama_produk" class="form-control" required
+                                autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -23,7 +25,7 @@
                             <select name="id_kategori" id="id_kategori" class="form-control" required>
                                 <option value="">Pilih Kategori</option>
                                 @foreach ($kategori as $key => $item)
-                                <option value="{{ $key }}">{{ $item }}</option>
+                                    <option value="{{ $key }}">{{ $item }}</option>
                                 @endforeach
                             </select>
                             <span class="help-block with-errors"></span>
@@ -81,21 +83,32 @@
                     <div class="form-group row">
                         <label for="stok" class="col-lg-2 col-lg-offset-1 control-label">Stok</label>
                         <div class="col-lg-6">
-                            <input type="number" name="stok" id="stok" class="form-control" required value="0">
+                            <input type="number" name="stok" id="stok" class="form-control" required
+                                value="0">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="stok_buffer" class="col-lg-2 col-lg-offset-1 control-label">Stok Minimal</label>
                         <div class="col-lg-6">
-                            <input type="number" name="stok_buffer" id="stok_buffer" class="form-control" required value="0">
+                            <input type="number" name="stok_buffer" id="stok_buffer" class="form-control" required
+                                value="0">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="batch" class="col-lg-2 col-lg-offset-1 control-label">Tags ( Untuk
+                            promo)</label>
+                        <div class="col-lg-6">
+                            <input type="text" name="tags" id="tags" class="form-control">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>
-                    <button type="button" class="btn btn-sm btn-flat btn-warning" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Batal</button>
+                    <button type="button" class="btn btn-sm btn-flat btn-warning" data-dismiss="modal"><i
+                            class="fa fa-arrow-circle-left"></i> Batal</button>
                 </div>
             </div>
         </form>

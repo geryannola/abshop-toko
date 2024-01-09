@@ -17,7 +17,9 @@ use App\Http\Controllers\{
     UserController,
     Publics\HomeController,
     Publics\ProductsController,
+    Publics\ShopController,
 };
+// use App\Http\Controllers\Publics\ShopController;
 // use App\Http\Controllers\Publics\HomeController;
 
 use Illuminate\Support\Facades\Route;
@@ -36,6 +38,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', 'Publics\HomeController@index');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductsController::class, 'index'])->name('products');
+Route::get('/cart', [ShopController::class, 'store'])->name('store');
 Route::get('/admin', function () {
     return redirect()->route('login');
 });

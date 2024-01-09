@@ -16,36 +16,20 @@
                          <div class="card-body p-4">
                              <!-- Product name-->
                              <h5 class="fw-bolder card-title text-primary">{{ $product->nama_produk }}</h5>
-                             <!-- Product price-->
-                             <h6 class="price text-primary">
-                                 {{ format_uang($product->harga_jual) }}/{{ $product->jml_kemasan }}
-                                 Buah</h6>
-                             <h6 class="price text-primary">{{ format_uang($product->harga_ecer) }}/Buah</h6>
                          </div>
-                         <div class="card-footer text-center">
-                             <form action="{{ url('/cart') }}" method="POST" class="side-by-side">
-                                 {!! csrf_field() !!}
-                                 <input type="hidden" name="id" value="{{ $product->id_produk }}">
-                                 <input type="hidden" name="name" value="{{ $product->nama_produk }}">
-                                 <input type="hidden" name="price" value="{{ $product->harga_jual }}">
-                                 <button type="submit" class="btn btn-secondary text-Light" value=''><i
-                                         class="bi bi-plus-circle-fill icon-blue"></i> Keranjang
-                                 </button>
-                                 {{-- <button>
-                                     class="btn btn-outline-secondary border-start-0 rounded-pill ms-n3 border bg-white"
-                                     type="button">
-                                     <i class="fa fa-search"></i>
-                                 </button> --}}
-                             </form>
-                             {{-- <form action="{{ url('/cart') }}" method="POST" class="side-by-side">
-                                 {!! csrf_field() !!}
-                                 <input type="hidden" name="id" value="{{ $product->id_produk }}">
-                                 <input type="hidden" name="name" value="{{ $product->nama_produk }}">
-                                 <input type="hidden" name="price" value="{{ $product->harga_jual }}">
-                                 <input type="submit" class="btn btn-success btn-lg" value="Add to Cart">
-                             </form> --}}
-
-                             {{-- <a href="#" class="btn btn-secondary display-3">Tambahkan Keranjang</a> --}}
+                         <div class="card-footer">
+                             <div class="card-body p-2">
+                                 <!-- Product price-->
+                                 <h6 class="price text-primary">
+                                     {{ format_uang($product->harga_jual) }}/{{ $product->jml_kemasan }}
+                                     Buah</h6>
+                                 <h6 class="price text-primary">{{ format_uang($product->harga_ecer) }}/Buah</h6>
+                             </div>
+                             <div class="card-body p-2 text-center">
+                                 <a href="{{ route('store', [$product->id_produk, $product->nama_produk, $product->harga_jual]) }}"
+                                     class="btn btn-secondary display-3"><i class="bi bi-plus-circle-fill icon-blue"></i>
+                                     Keranjang</a>
+                             </div>
                          </div>
                      </div>
                  </div>

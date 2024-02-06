@@ -121,7 +121,7 @@
                             table.ajax.reload();
                         })
                         .fail((errors) => {
-                            alert('Tidak dapat menyimpan data');
+                            alert(errors);
                             return;
                         });
                 }
@@ -164,6 +164,7 @@
                     $('#modal-form [name=diskon]').val(response.diskon);
                     $('#modal-form [name=stok]').val(response.stok);
                     $('#modal-form [name=stok_buffer]').val(response.stok_buffer);
+                    $('#modal-form [name=image]').val(response.image);
                     $('#modal-form [name=tags]').val(response.tags);
                 })
                 .fail((errors) => {

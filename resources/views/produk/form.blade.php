@@ -1,9 +1,8 @@
 <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="" method="post" class="form-horizontal">
+        <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
             @csrf
             @method('post')
-
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -93,6 +92,13 @@
                         <div class="col-lg-6">
                             <input type="number" name="stok_buffer" id="stok_buffer" class="form-control" required
                                 value="0">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="image" class="col-lg-2 col-lg-offset-1 control-label">Gambar</label>
+                        <div class="col-lg-6">
+                            <input type="file" name="image" id="image" class="form-control-file">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

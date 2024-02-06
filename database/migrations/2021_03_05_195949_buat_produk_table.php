@@ -26,6 +26,7 @@ class BuatProdukTable extends Migration
             $table->integer('harga_ecer');
             $table->integer('stok');
             $table->integer('stok_buffer');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

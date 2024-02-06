@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use App\Models\Produk;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 
 class ProdukController extends Controller
@@ -27,7 +28,6 @@ class ProdukController extends Controller
             ->select('produk.*', 'nama_kategori')
             ->orderBy('kode_produk', 'desc')
             ->get();
-
 
         return datatables()
             ->of($produk)
@@ -86,6 +86,22 @@ class ProdukController extends Controller
     {
         $produk = Produk::latest()->first() ?? new Produk();
         $request['kode_produk'] = 'P' . tambah_nol_didepan((int)$produk->id_produk + 1, 6);
+        // dd($request);
+        // $request->file('image')->store('public', '123');
+
+        // $file = $request->file('image'); // Retrieve the uploaded file from the request
+        // $filename = $file->getClientOriginalName(); // Retrieve the original filename
+        // $request['image'] = $file->storeAs('public/produk', $filename);
+
+        // Storage::disks('local')->put('produk' . $filename, file_get_contents($file));
+
+        if ($request->hasfile('image')) {
+            $file = $request->file('image');
+            $extenstion = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extenstion;
+            $file->move('uploads/students/', $filename);
+            $produk['image'] = $filename;
+        }
 
         $produk = Produk::create($request->all());
 

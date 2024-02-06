@@ -63,11 +63,11 @@
         </div>
     </nav>
     <!-- Header-->
-    <header class="bg-dark py-5">
+    <header class="bg-dark container-fluid py-5">
         <div class="px-lg-5 container my-5 px-4">
             <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Shop in style</h1>
-                <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+                <h1 class="display-4 fw-bolder">{{ env('nama_toko') }}</h1>
+                <p class="lead fw-normal text-white-50 mb-0">{{ env('slogan_toko') }}</p>
             </div>
         </div>
     </header>
@@ -83,7 +83,7 @@
     <!-- Footer-->
     <footer class="bg-dark py-5">
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
+            <p class="m-0 text-center text-white">Copyright &copy; ABkreator.com 2023</p>
         </div>
     </footer>
     <!-- Bootstrap core JS-->

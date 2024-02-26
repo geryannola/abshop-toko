@@ -1,9 +1,8 @@
 <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="" method="post" class="form-horizontal">
+        <form action="" method="post" class="form-horizontal" data-toggle="validator" enctype="multipart/form-data">
             @csrf
             @method('post')
-
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -93,6 +92,26 @@
                         <div class="col-lg-6">
                             <input type="number" name="stok_buffer" id="stok_buffer" class="form-control" required
                                 value="0">
+<<<<<<< HEAD
+=======
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="image" class="col-lg-2 control-label">Logo Perusahaan</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="image" class="form-control" id="image">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-logo"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="batch" class="col-lg-2 col-lg-offset-1 control-label">Tags ( Untuk
+                            promo)</label>
+                        <div class="col-lg-6">
+                            <input type="text" name="tags" id="tags" class="form-control">
+>>>>>>> webshop
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

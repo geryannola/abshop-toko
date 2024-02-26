@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Publics;
 
 use App\Http\Controllers\Controller;
 use App\Models\Publics\ProductsModel;
+
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller

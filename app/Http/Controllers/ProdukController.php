@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use App\Models\Produk;
-use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Str;
 use PDF;
 
 class ProdukController extends Controller
@@ -84,27 +85,29 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        $produk = Produk::latest()->first() ?? new Produk();
-        $request['kode_produk'] = 'P' . tambah_nol_didepan((int)$produk->id_produk + 1, 6);
-        // dd($request);
-        // $request->file('image')->store('public', '123');
+        // $produk = Produk::latest()->first() ?? new Produk();
+        // $request['kode_produk'] = 'P' . tambah_nol_didepan((int)$produk->id_produk + 1, 6);
 
-        // $file = $request->file('image'); // Retrieve the uploaded file from the request
-        // $filename = $file->getClientOriginalName(); // Retrieve the original filename
-        // $request['image'] = $file->storeAs('public/produk', $filename);
+        // if (!$request->has('image')) {
+        //     return response()->json(['message' => 'Missing file'], 422);
+        // }
+        // $file = $request->file('image');
+        // $name = Str::random(10);
+        // $url = Storage::putFileAs('images', $file, $name . '.' . $file->extension());
 
-        // Storage::disks('local')->put('produk' . $filename, file_get_contents($file));
+        // $request['kode_produk'] = $url;
+        // $produk = Produk::create($request->all());
 
-        if ($request->hasfile('image')) {
-            $file = $request->file('image');
-            $extenstion = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extenstion;
-            $file->move('uploads/students/', $filename);
-            $produk['image'] = $filename;
+        $imageName = time() . '.' . $request->image->extension();
+        $uploadedImage = $request->image->move(public_path('images'), $imageName);
+        $imagePath = 'images/' . $imageName;
+
+        $params = $request->validated();
+        if ($product = Produk::create($params)) {
+            $product->image = $imagePath;
+            $product->save();
         }
-
-        $produk = Produk::create($request->all());
-
+        // return redirect(route('products.index'))->with('success', 'Added!');
         return response()->json('Data berhasil disimpan', 200);
     }
 
@@ -142,7 +145,18 @@ class ProdukController extends Controller
     public function update(Request $request, $id)
     {
         $produk = Produk::find($id);
-        $produk->update($request->all());
+        // $produk->update($request->all());
+        $produk->nama_produk = $request->nama_produk;
+        // $produk->nama_produk = $request->nama_produk;
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $nama = 'logo-' . date('YmdHis') . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('/img'), $nama);
+
+            $produk->image = "/img/$nama";
+        }
+        $produk->update();
 
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -161,6 +175,7 @@ class ProdukController extends Controller
         return response(null, 204);
     }
 
+
     public function deleteSelected(Request $request)
     {
         foreach ($request->id_produk as $id) {
@@ -171,6 +186,13 @@ class ProdukController extends Controller
         return response(null, 204);
     }
 
+    public function rules()
+    {
+        return [
+
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ];
+    }
     public function cetakBarcode(Request $request)
     {
         $dataproduk = array();

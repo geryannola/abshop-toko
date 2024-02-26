@@ -1,6 +1,6 @@
 <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <form action="" method="post" class="form-horizontal" data-toggle="validator" enctype="multipart/form-data">
             @csrf
             @method('post')
             <div class="modal-content">
@@ -96,10 +96,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="image" class="col-lg-2 col-lg-offset-1 control-label">Gambar</label>
-                        <div class="col-lg-6">
-                            <input type="file" name="image" id="image" class="form-control-file">
+                        <label for="image" class="col-lg-2 control-label">Logo Perusahaan</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="image" class="form-control" id="image">
                             <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-logo"></div>
                         </div>
                     </div>
                     <div class="form-group row">
